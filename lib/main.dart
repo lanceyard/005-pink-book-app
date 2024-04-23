@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pink_book_app/ui/login_page.dart';
+import 'package:pink_book_app/ui/splash_page.dart';
+import 'package:pink_book_app/widget/theme/theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,14 +14,23 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darktheme,
+      themeMode: ThemeMode.light,
       routes: {
-        '/' : (context) => const SplashPage()
+        '/': (context) => const SplashPage(),
+        '/login': (context) => const LoginPage(),
       },
     );
   }
 }
+
+//! To Do :
+// SplashScreen bawaan flutter belum hilang kurang tau solusinya
+// Dependencies Goggle fonts belum terbaru
+
+//* Changes System:
+// Melakukan perubahan pada CompileSDkVersion menjadi 34
+// Mengupgrade gradle.wrapper (di aku erorr kemarin harus up ke 8.1.1)
+
