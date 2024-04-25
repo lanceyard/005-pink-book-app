@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pink_book_app/widget/button/filled_button.dart';
 import 'package:pink_book_app/widget/button/outlined_Button.dart';
@@ -34,11 +36,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SvgPicture.asset(
-                    'assets/wellcome.svg',
-                    width: MediaQuery.of(context).size.width,
-                    height: 240,
-                  ),
+                  Image.asset("assets/wellcome.png"),
                   const SizedBox(
                     height: 24,
                   ),
@@ -94,26 +92,29 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(
                     height: 18,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Doesn't have account yet? you can ",
-                        style: subHeaderTextStyle.copyWith(
-                          fontSize: 16,
+                  Center(
+                    child: Wrap(
+                      alignment: WrapAlignment.center,
+                      // mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Doesn't have account yet? you can ",
+                          style: subHeaderTextStyle.copyWith(
+                            fontSize: 16,
+                          ),
                         ),
-                      ),
-                      CustomTextButton(
-                        text: 'Register ',
-                        onPressed: () {},
-                      ),
-                      Text(
-                        "first!",
-                        style: subHeaderTextStyle.copyWith(
-                          fontSize: 16,
+                        CustomTextButton(
+                          text: 'Register ',
+                          onPressed: () {},
                         ),
-                      ),
-                    ],
+                        Text(
+                          "first!",
+                          style: subHeaderTextStyle.copyWith(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(
                     height: 16,
@@ -146,7 +147,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: 16,
                   ),
                   CustomOutlinedButton(
-                    logo: "assets/google_logo.svg",
+                    logo: "assets/google_logo.png",
                     title: 'SIGN WITH GOOGLE',
                     width: MediaQuery.of(context).size.width,
                     height: 48,

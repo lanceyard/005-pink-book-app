@@ -48,7 +48,7 @@ class CustomOutlinedButton extends StatelessWidget {
               if (logo != null &&
                   logo!
                       .isNotEmpty) // Periksa apakah logo tidak null atau kosong
-                SvgPicture.asset(
+                Image.asset(
                   logo!,
                   width: 24,
                   height: 24,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pink_book_app/ui/login_page.dart';
-import 'package:pink_book_app/ui/splash_page.dart';
 import 'package:pink_book_app/widget/theme/theme.dart';
 
 void main() {
@@ -19,8 +18,8 @@ class MyApp extends StatelessWidget {
       darkTheme: AppTheme.darktheme,
       themeMode: ThemeMode.light,
       routes: {
-        '/': (context) => const SplashPage(),
-        '/login': (context) => const LoginPage(),
+        // '/': (context) => const SplashPage(),
+        '/': (context) => const LoginPage(),
       },
     );
   }
