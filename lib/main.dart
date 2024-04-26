@@ -26,8 +26,7 @@ class MyApp extends StatelessWidget {
 }
 
 //! To Do :
-// SplashScreen bawaan flutter belum hilang kurang tau solusinya
-// Dependencies Goggle fonts belum terbaru
+// all done
 
 //* Changes System:
 // Melakukan perubahan pada CompileSDkVersion menjadi 34

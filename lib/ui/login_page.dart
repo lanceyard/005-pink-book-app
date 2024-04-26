@@ -89,7 +89,6 @@ class _LoginPageState extends State<LoginPage> {
                   Center(
                     child: Wrap(
                       alignment: WrapAlignment.center,
-                      // mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           "Doesn't have account yet? you can ",
@@ -124,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                     hvColor: oldRedColor,
                     onPresssed: () {
                       if (_formKey.currentState!.validate()) {
-                        Navigator.pushNamed(context, '/register');
+                        // Navigator.pushNamed(context, '/register');
                       }
                     },
                   ),

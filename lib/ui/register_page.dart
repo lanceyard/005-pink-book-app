@@ -168,7 +168,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   Center(
                     child: Wrap(
                       alignment: WrapAlignment.center,
-                      // mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           "Already have account? you can ",
