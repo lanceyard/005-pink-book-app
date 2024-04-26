@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pink_book_app/widget/button/filled_button.dart';
-import 'package:pink_book_app/widget/button/outlined_Button.dart';
+import 'package:pink_book_app/widget/button/outlined_button.dart';
 import 'package:pink_book_app/widget/button/text_button.dart';
 import 'package:pink_book_app/widget/field/field.dart';
 import 'package:pink_book_app/widget/theme/color_theme.dart';
