@@ -33,12 +33,12 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Image.asset("assets/wellcome.png"),
+                  Image.asset("assets/welcome.png"),
                   const SizedBox(
                     height: 24,
                   ),
                   Text(
-                    'Wellcome Back,',
+                    'Welcome Back,',
                     style: headerTextStyle.copyWith(
                         fontSize: 26, fontWeight: FontWeight.bold),
                   ),
