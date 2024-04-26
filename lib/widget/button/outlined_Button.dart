@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pink_book_app/widget/theme/color_theme.dart';
 
 import '../theme/text_theme.dart';
@@ -65,15 +64,6 @@ class CustomOutlinedButton extends StatelessWidget {
               ),
             ],
           ),
-          // child: Center(
-          //   child: Text(
-          //     title,
-          //     style: buttonTextStyle.copyWith(
-          //         fontSize: 16,
-          //         fontWeight: FontWeight.w500,
-          //         color: oldRedColor),
-          //   ),
-          // ),
         ),
       ),
     );

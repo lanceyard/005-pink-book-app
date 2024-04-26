@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:pink_book_app/widget/button/filled_button.dart';
-import 'package:pink_book_app/widget/button/outlined_button.dart';
+import 'package:pink_book_app/widget/button/outlined_Button.dart';
 import 'package:pink_book_app/widget/button/text_button.dart';
 import 'package:pink_book_app/widget/field/field.dart';
 import 'package:pink_book_app/widget/theme/color_theme.dart';
 import 'package:pink_book_app/widget/theme/text_theme.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
+  final usernameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
   bool isLoading = false;
 
@@ -38,23 +40,26 @@ class _LoginPageState extends State<LoginPage> {
                     height: 24,
                   ),
                   Text(
-                    'Wellcome Back,',
+                    "Wellcome,",
                     style: headerTextStyle.copyWith(
-                        fontSize: 26, fontWeight: FontWeight.bold),
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   Text(
-                    'Login with a registered account',
+                    'Stay informed, stay healthy! Register now to track your health',
                     style: subHeaderTextStyle.copyWith(
-                        fontSize: 18, fontWeight: FontWeight.w400),
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                   const SizedBox(
                     height: 24,
                   ),
                   InputField(
-                    controller: emailController,
-                    // isLoading digunakan untuk pengecekan api
+                    controller: usernameController,
                     isLoading: isLoading,
-                    keyType: TextInputType.emailAddress,
+                    prefixIcon: Icons.person,
                     hint: 'Input Username',
                     validator: (val) {
                       if (val == null || val.isEmpty) {
@@ -62,17 +67,34 @@ class _LoginPageState extends State<LoginPage> {
                       }
                       return null;
                     },
-                    prefixIcon: Icons.mail,
                   ),
                   const SizedBox(
                     height: 18,
                   ),
                   InputField(
+                    controller: emailController,
                     isLoading: isLoading,
+                    keyType: TextInputType.emailAddress,
+                    prefixIcon: Icons.mail,
+                    hint: 'Input E-mail',
+                    validator: (val) {
+                      if (val == null || val.isEmpty) {
+                        return 'The E-mail field must be filled in';
+                      }
+                      if (!val.contains('@')) {
+                        return 'Invalid E-mail';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  InputField(
                     controller: passwordController,
+                    isLoading: isLoading,
                     prefixIcon: Icons.key,
                     hint: 'Input Password',
-                    isPassword: true,
                     validator: (val) {
                       if (val == null || val.isEmpty) {
                         return 'The Password field must be filled in';
@@ -86,45 +108,33 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(
                     height: 18,
                   ),
-                  Center(
-                    child: Wrap(
-                      alignment: WrapAlignment.center,
-                      // mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Doesn't have account yet? you can ",
-                          style: subHeaderTextStyle.copyWith(
-                            fontSize: 16,
-                          ),
-                        ),
-                        CustomTextButton(
-                          text: 'Register ',
-                          onPressed: () {
-                            Navigator.pushNamedAndRemoveUntil(
-                                context, '/register', (route) => false);
-                          },
-                        ),
-                        Text(
-                          "first!",
-                          style: subHeaderTextStyle.copyWith(
-                            fontSize: 16,
-                          ),
-                        ),
-                      ],
-                    ),
+                  InputField(
+                    controller: confirmPasswordController,
+                    isLoading: isLoading,
+                    prefixIcon: Icons.key,
+                    hint: 'Input Password',
+                    validator: (val) {
+                      if (val == null || val.isEmpty) {
+                        return 'The Confirm Password column must be filled in';
+                      }
+                      if (val != passwordController.text) {
+                        return 'Password and Confirm password must be the same';
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(
-                    height: 16,
+                    height: 24,
                   ),
                   CustomFilledButton(
-                    title: 'SIGN IN',
+                    title: 'SIGN UP',
                     width: MediaQuery.of(context).size.width,
                     height: 48,
                     bgColor: basePinkColor,
                     hvColor: oldRedColor,
                     onPresssed: () {
                       if (_formKey.currentState!.validate()) {
-                        Navigator.pushNamed(context, '/register');
+                        Navigator.pushNamed(context, "/");
                       }
                     },
                   ),
@@ -145,23 +155,43 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   CustomOutlinedButton(
                     logo: "assets/google_logo.png",
-                    title: 'SIGN IN WITH GOOGLE',
+                    title: 'SIGN UP WITH GOOGLE',
                     width: MediaQuery.of(context).size.width,
                     height: 48,
                     hvColor: shadePinkColor,
                     bgColor: basePinkColor,
                     onPresssed: () {},
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.18),
+                  const SizedBox(
+                    height: 16,
+                  ),
                   Center(
-                    child: Text(
-                      'by BIMA ANGGARA WIRASATYA',
-                      style: headerTextStyle.copyWith(
-                          fontSize: 16,
-                          fontWeight: FontWeight.normal,
-                          color: greyColor),
+                    child: Wrap(
+                      alignment: WrapAlignment.center,
+                      // mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Already have account? you can ",
+                          style: subHeaderTextStyle.copyWith(
+                            fontSize: 16,
+                          ),
+                        ),
+                        CustomTextButton(
+                          text: 'Login here ',
+                          onPressed: () {
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, '/', (route) => false);
+                          },
+                        ),
+                        Text(
+                          "to enter!",
+                          style: subHeaderTextStyle.copyWith(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
