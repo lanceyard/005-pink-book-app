@@ -24,8 +24,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.example.pink_book_app"
-    compileSdkVersion 34
-    // compileSdkVersion flutter.compileSdkVersion
+    compileSdk flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
     compileOptions {

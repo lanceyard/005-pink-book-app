@@ -94,6 +94,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     controller: passwordController,
                     isLoading: isLoading,
                     prefixIcon: Icons.key,
+                    isPassword: true,
                     hint: 'Input Password',
                     validator: (val) {
                       if (val == null || val.isEmpty) {
@@ -112,6 +113,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     controller: confirmPasswordController,
                     isLoading: isLoading,
                     prefixIcon: Icons.key,
+                    isPassword: true,
                     hint: 'Input Password',
                     validator: (val) {
                       if (val == null || val.isEmpty) {
