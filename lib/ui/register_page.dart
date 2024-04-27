@@ -114,7 +114,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     isLoading: isLoading,
                     prefixIcon: Icons.key,
                     isPassword: true,
-                    hint: 'Input Password',
+                    hint: 'Input Confirm Password',
                     validator: (val) {
                       if (val == null || val.isEmpty) {
                         return 'The Confirm Password column must be filled in';

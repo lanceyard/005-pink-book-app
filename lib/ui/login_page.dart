@@ -123,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                     hvColor: oldRedColor,
                     onPresssed: () {
                       if (_formKey.currentState!.validate()) {
-                        // Navigator.pushNamed(context, '/register');
+                        Navigator.pushReplacementNamed(context, '/history');
                       }
                     },
                   ),

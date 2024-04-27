@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pink_book_app/ui/history_page.dart';
+import 'package:pink_book_app/ui/input_page.dart';
 import 'package:pink_book_app/ui/login_page.dart';
 import 'package:pink_book_app/ui/register_page.dart';
+import 'package:pink_book_app/ui/result_page.dart';
 import 'package:pink_book_app/widget/theme/theme.dart';
 
 void main() {
@@ -20,6 +23,9 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),
+        '/history': (context) => const HistoryPage(),
+        '/input': (context) => const InputPage(),
+        '/result': (context) => const ResultPage(),
       },
     );
   }
