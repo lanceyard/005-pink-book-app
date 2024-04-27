@@ -57,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
                     // isLoading digunakan untuk pengecekan api
                     isLoading: isLoading,
                     keyType: TextInputType.emailAddress,
-                    hint: 'Input Username',
+                    hint: 'Input Email',
                     validator: (val) {
                       if (val == null || val.isEmpty) {
                         return 'The Name column must be filled in';
@@ -125,7 +125,8 @@ class _LoginPageState extends State<LoginPage> {
                     hvColor: oldRedColor,
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        Navigator.pushReplacementNamed(context, '/history');
+                        signInWithEmailAndPassword(
+                            emailController.text, passwordController.text);
                       }
                     },
                   ),
@@ -180,7 +181,24 @@ class _LoginPageState extends State<LoginPage> {
     AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: gAuth?.accessToken, idToken: gAuth?.idToken);
 
-    UserCredential user = await FirebaseAuth.instance.signInWithCredential(credential);
+    await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
+  Future<void> signInWithEmailAndPassword(email, password) async {
+    try {
+      final credential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 }

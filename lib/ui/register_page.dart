@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pink_book_app/widget/button/filled_button.dart';
 import 'package:pink_book_app/widget/button/outlined_button.dart';
@@ -15,7 +16,6 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
-  final usernameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
@@ -55,21 +55,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   const SizedBox(
                     height: 24,
-                  ),
-                  InputField(
-                    controller: usernameController,
-                    isLoading: isLoading,
-                    prefixIcon: Icons.person,
-                    hint: 'Input Username',
-                    validator: (val) {
-                      if (val == null || val.isEmpty) {
-                        return 'The Name column must be filled in';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 18,
                   ),
                   InputField(
                     controller: emailController,
@@ -136,33 +121,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     hvColor: oldRedColor,
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        Navigator.pushNamed(context, "/");
+                        createUserWithEmailAndPassword(
+                            emailController.text, passwordController.text);
                       }
                     },
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Center(
-                    child: Text(
-                      'OR',
-                      style: subHeaderTextStyle.copyWith(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  CustomOutlinedButton(
-                    logo: "assets/google_logo.png",
-                    title: 'SIGN UP WITH GOOGLE',
-                    width: MediaQuery.of(context).size.width,
-                    height: 48,
-                    hvColor: shadePinkColor,
-                    bgColor: basePinkColor,
-                    onPressed: () {},
                   ),
                   const SizedBox(
                     height: 16,
@@ -200,5 +162,23 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       ),
     );
+  }
+
+  Future<void> createUserWithEmailAndPassword(email, password) async {
+    try {
+      final credential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 }
