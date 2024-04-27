@@ -5,7 +5,7 @@ class CustomFilledButton extends StatelessWidget {
   final String title;
   final double width;
   final double height;
-  final VoidCallback? onPresssed;
+  final VoidCallback? onPressed;
 
   final Color? bgColor;
   final Color? hvColor;
@@ -15,7 +15,7 @@ class CustomFilledButton extends StatelessWidget {
       required this.title,
       required this.width,
       required this.height,
-      this.onPresssed,
+      this.onPressed,
       this.bgColor,
       this.hvColor});
 
@@ -35,7 +35,7 @@ class CustomFilledButton extends StatelessWidget {
           highlightColor: Colors.transparent,
           splashColor: hvColor,
           borderRadius: BorderRadius.circular(10),
-          onTap: onPresssed,
+          onTap: onPressed,
           child: Center(
             child: Text(
               title,

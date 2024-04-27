@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pink_book_app/ui/auth_page.dart';
 import 'package:pink_book_app/ui/history_page.dart';
 import 'package:pink_book_app/ui/input_page.dart';
 import 'package:pink_book_app/ui/login_page.dart';
@@ -29,7 +30,8 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       themeMode: ThemeMode.light,
       routes: {
-        '/': (context) => const LoginPage(),
+        '/': (context) => const AuthPage(),
+        '/login': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),
         '/history': (context) => const HistoryPage(),
         '/input': (context) => const InputPage(),
@@ -38,11 +40,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-//! To Do :
-// all done
-
-//* Changes System:
-// Melakukan perubahan pada CompileSDkVersion menjadi 34
-// Mengupgrade gradle.wrapper (di aku erorr kemarin harus up ke 8.1.1)
-

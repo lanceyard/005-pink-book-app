@@ -7,7 +7,7 @@ class CustomOutlinedButton extends StatelessWidget {
   final String title;
   final double width;
   final double height;
-  final VoidCallback? onPresssed;
+  final VoidCallback? onPressed;
 
   final String? logo;
   final Color bgColor;
@@ -17,7 +17,7 @@ class CustomOutlinedButton extends StatelessWidget {
       required this.title,
       required this.width,
       required this.height,
-      this.onPresssed,
+      this.onPressed,
       required this.bgColor,
       this.hvColor,
       this.logo});
@@ -39,7 +39,7 @@ class CustomOutlinedButton extends StatelessWidget {
         child: InkWell(
           highlightColor: Colors.transparent,
           splashColor: hvColor,
-          onTap: onPresssed,
+          onTap: onPressed,
           borderRadius: BorderRadius.circular(10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

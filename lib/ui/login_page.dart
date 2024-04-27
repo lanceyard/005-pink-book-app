@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:pink_book_app/widget/button/filled_button.dart';
 import 'package:pink_book_app/widget/button/outlined_button.dart';
 import 'package:pink_book_app/widget/button/text_button.dart';
@@ -121,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: 48,
                     bgColor: basePinkColor,
                     hvColor: oldRedColor,
-                    onPresssed: () {
+                    onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         Navigator.pushReplacementNamed(context, '/history');
                       }
@@ -149,7 +151,9 @@ class _LoginPageState extends State<LoginPage> {
                     height: 48,
                     hvColor: shadePinkColor,
                     bgColor: basePinkColor,
-                    onPresssed: () {},
+                    onPressed: () {
+                      signInWithGoogle();
+                    },
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.18),
                   Center(
@@ -168,5 +172,15 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  Future<void> signInWithGoogle() async {
+    GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
+    GoogleSignInAuthentication? gAuth = await gUser?.authentication;
+    AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: gAuth?.accessToken, idToken: gAuth?.idToken);
+
+    UserCredential user = await FirebaseAuth.instance.signInWithCredential(credential);
+    print(user.user?.displayName);
   }
 }

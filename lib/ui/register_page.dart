@@ -134,7 +134,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 48,
                     bgColor: basePinkColor,
                     hvColor: oldRedColor,
-                    onPresssed: () {
+                    onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         Navigator.pushNamed(context, "/");
                       }
@@ -162,7 +162,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 48,
                     hvColor: shadePinkColor,
                     bgColor: basePinkColor,
-                    onPresssed: () {},
+                    onPressed: () {},
                   ),
                   const SizedBox(
                     height: 16,

@@ -12,7 +12,20 @@
           "package_name": "com.example.pink_book_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "109549606658-7jm98m2r5gvtrj4ndees7tloo5ifcbls.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.pink_book_app",
+            "certificate_hash": "e944d0a52004951a47b4e139b20a8e55e3bea189"
+          }
+        },
+        {
+          "client_id": "109549606658-ndio7rba78bbh61i83umoauji3fj5d5i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyC_wh1jFHWZ7gaoYwR4vfcOkHxKl1Kn-zI"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "109549606658-ndio7rba78bbh61i83umoauji3fj5d5i.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "109549606658-nsfjtat4frreihuf5kht355p6ctl59vp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.pinkBookApp"
+              }
+            }
+          ]
         }
       }
     }
