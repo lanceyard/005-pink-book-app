@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:pink_book_app/ui/auth_page.dart';
-import 'package:pink_book_app/ui/history_page.dart';
-import 'package:pink_book_app/ui/input_page.dart';
-import 'package:pink_book_app/ui/login_page.dart';
-import 'package:pink_book_app/ui/register_page.dart';
-import 'package:pink_book_app/ui/result_page.dart';
+import 'package:pink_book_app/ui/auth/auth_page.dart';
+import 'package:pink_book_app/ui/auth/login_page.dart';
+import 'package:pink_book_app/ui/auth/register_page.dart';
+import 'package:pink_book_app/ui/history/history_page.dart';
+import 'package:pink_book_app/ui/history/input_page.dart';
+import 'package:pink_book_app/ui/result/result_page.dart';
 import 'package:pink_book_app/widget/theme/theme.dart';
 
 import 'package:firebase_core/firebase_core.dart';
