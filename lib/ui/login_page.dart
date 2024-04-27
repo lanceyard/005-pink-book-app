@@ -181,6 +181,6 @@ class _LoginPageState extends State<LoginPage> {
         accessToken: gAuth?.accessToken, idToken: gAuth?.idToken);
 
     UserCredential user = await FirebaseAuth.instance.signInWithCredential(credential);
-    print(user.user?.displayName);
   }
+
 }
