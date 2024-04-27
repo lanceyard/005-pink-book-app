@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "109549606658",
+    "project_id": "pink-book-2a2b6",
+    "storage_bucket": "pink-book-2a2b6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:109549606658:android:2438316f7220b47494d41b",
+        "android_client_info": {
+          "package_name": "com.example.pink_book_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_wh1jFHWZ7gaoYwR4vfcOkHxKl1Kn-zI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

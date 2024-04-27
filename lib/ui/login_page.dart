@@ -124,6 +124,7 @@ class _LoginPageState extends State<LoginPage> {
                     onPresssed: () {
                       if (_formKey.currentState!.validate()) {
                         // Navigator.pushNamed(context, '/register');
+                        print("lol");
                       }
                     },
                   ),
