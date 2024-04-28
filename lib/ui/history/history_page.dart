@@ -125,10 +125,20 @@ class _HistoryPageState extends State<HistoryPage>
     return Scaffold(
         appBar: AppBar(
           actions: [
-          IconButton(onPressed: () async {
-          await GoogleSignIn().signOut();
-          FirebaseAuth.instance.signOut();
-          }, icon: const Icon(Icons.logout))
+            IconButton(
+                onPressed: () async {
+                  const snackBar = SnackBar(
+                    content: Text('PINK BOOK APP by BIMA ANGGARA WIRASATYA!'),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                },
+                icon: const Icon(Icons.info)),
+            IconButton(
+                onPressed: () async {
+                  await GoogleSignIn().signOut();
+                  FirebaseAuth.instance.signOut();
+                },
+                icon: const Icon(Icons.logout))
           ],
           backgroundColor: shadePinkColor,
           title: Text(
