@@ -257,6 +257,7 @@ class _HistoryPageState extends State<HistoryPage>
               titleStyle: const TextStyle(fontSize: 14, color: Colors.white),
               onPress: () {
                 _animationController.reverse();
+                Navigator.pushNamed(context, '/input');
               },
             ),
             // Floating action menu item

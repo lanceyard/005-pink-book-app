@@ -5,6 +5,7 @@ Color shadePinkColor = const Color(0xffFFDAEE);
 Color oldRedColor = const Color(0xff402B3A);
 Color dark20Color = const Color(0xff212E30);
 Color greyColor = const Color(0xffA4A8AE);
+Color backgroundColor = const Color(0xffF8F4EC);
 
 MaterialColor baseMaterial = const MaterialColor(0xffFF9BD2, <int, Color>{
   50: Color(0xffFF9BD2),
