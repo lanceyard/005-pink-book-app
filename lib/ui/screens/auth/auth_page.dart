@@ -1,9 +1,7 @@
-import 'dart:ffi';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:pink_book_app/ui/auth/login_page.dart';
-import 'package:pink_book_app/ui/history/history_page.dart';
+import 'package:pink_book_app/ui/screens/auth/login_page.dart';
+import 'package:pink_book_app/ui/screens/history/history_page.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});

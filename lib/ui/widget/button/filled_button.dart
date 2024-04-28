@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pink_book_app/widget/theme/text_theme.dart';
+import 'package:pink_book_app/ui/widget/theme/text_theme.dart';
 
 class CustomFilledButton extends StatelessWidget {
   final String title;

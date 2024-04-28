@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pink_book_app/widget/theme/color_theme.dart';
-import 'package:pink_book_app/widget/theme/text_theme.dart';
+import 'package:pink_book_app/ui/widget/theme/color_theme.dart';
+import 'package:pink_book_app/ui/widget/theme/text_theme.dart';
 
 class DropdownField extends StatefulWidget {
   const DropdownField({

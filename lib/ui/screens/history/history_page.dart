@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:pink_book_app/widget/theme/color_theme.dart';
-import 'package:pink_book_app/widget/theme/text_theme.dart';
+import 'package:pink_book_app/ui/widget/theme/color_theme.dart';
+import 'package:pink_book_app/ui/widget/theme/text_theme.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});

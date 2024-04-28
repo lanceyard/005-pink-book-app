@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:pink_book_app/ui/auth/auth_page.dart';
-import 'package:pink_book_app/ui/auth/login_page.dart';
-import 'package:pink_book_app/ui/auth/register_page.dart';
-import 'package:pink_book_app/ui/history/history_page.dart';
-import 'package:pink_book_app/ui/history/input_page.dart';
-import 'package:pink_book_app/ui/result/result_page.dart';
-import 'package:pink_book_app/widget/theme/theme.dart';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:pink_book_app/ui/screens/auth/auth_page.dart';
+import 'package:pink_book_app/ui/screens/auth/login_page.dart';
+import 'package:pink_book_app/ui/screens/auth/register_page.dart';
+import 'package:pink_book_app/ui/screens/history/history_page.dart';
+import 'package:pink_book_app/ui/screens/history/input_page.dart';
+import 'package:pink_book_app/ui/screens/result/result_page.dart';
+import 'package:pink_book_app/ui/widget/theme/theme.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {

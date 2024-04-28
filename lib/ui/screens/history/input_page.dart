@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:pink_book_app/widget/Dialog/custom_alert_dialog.dart';
-import 'package:pink_book_app/widget/button/filled_button.dart';
-import 'package:pink_book_app/widget/field/dropdown.dart';
-import 'package:pink_book_app/widget/field/inputField.dart';
-import 'package:pink_book_app/widget/theme/color_theme.dart';
-import 'package:pink_book_app/widget/theme/text_theme.dart';
+import 'package:pink_book_app/ui/widget/Dialog/custom_alert_dialog.dart';
+import 'package:pink_book_app/ui/widget/button/filled_button.dart';
+import 'package:pink_book_app/ui/widget/field/dropdown.dart';
+import 'package:pink_book_app/ui/widget/field/inputField.dart';
+import 'package:pink_book_app/ui/widget/theme/color_theme.dart';
+import 'package:pink_book_app/ui/widget/theme/text_theme.dart';
 
 class InputPage extends StatefulWidget {
   const InputPage({super.key});

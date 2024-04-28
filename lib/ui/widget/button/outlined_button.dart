@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pink_book_app/widget/theme/color_theme.dart';
+import 'package:pink_book_app/ui/widget/theme/color_theme.dart';
 
 import '../theme/text_theme.dart';
 

@@ -1,11 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:pink_book_app/widget/button/filled_button.dart';
-import 'package:pink_book_app/widget/button/outlined_button.dart';
-import 'package:pink_book_app/widget/button/text_button.dart';
-import 'package:pink_book_app/widget/field/field.dart';
-import 'package:pink_book_app/widget/theme/color_theme.dart';
-import 'package:pink_book_app/widget/theme/text_theme.dart';
+import 'package:pink_book_app/ui/widget/button/filled_button.dart';
+import 'package:pink_book_app/ui/widget/button/text_button.dart';
+import 'package:pink_book_app/ui/widget/field/field.dart';
+import 'package:pink_book_app/ui/widget/theme/color_theme.dart';
+import 'package:pink_book_app/ui/widget/theme/text_theme.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});

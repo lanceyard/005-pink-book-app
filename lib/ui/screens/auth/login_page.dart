@@ -1,12 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:pink_book_app/widget/button/filled_button.dart';
-import 'package:pink_book_app/widget/button/outlined_button.dart';
-import 'package:pink_book_app/widget/button/text_button.dart';
-import 'package:pink_book_app/widget/field/field.dart';
-import 'package:pink_book_app/widget/theme/color_theme.dart';
-import 'package:pink_book_app/widget/theme/text_theme.dart';
+import 'package:pink_book_app/ui/widget/button/filled_button.dart';
+import 'package:pink_book_app/ui/widget/button/outlined_button.dart';
+import 'package:pink_book_app/ui/widget/button/text_button.dart';
+import 'package:pink_book_app/ui/widget/field/field.dart';
+import 'package:pink_book_app/ui/widget/theme/color_theme.dart';
+import 'package:pink_book_app/ui/widget/theme/text_theme.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -181,13 +181,16 @@ class _LoginPageState extends State<LoginPage> {
     AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: gAuth?.accessToken, idToken: gAuth?.idToken);
 
-    await FirebaseAuth.instance.signInWithCredential(credential);
+    try {
+      await FirebaseAuth.instance.signInWithCredential(credential);
+    } on FirebaseAuthException catch (e) {
+      print(e.code);
+    }
   }
 
   Future<void> signInWithEmailAndPassword(email, password) async {
     try {
-      final credential =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
