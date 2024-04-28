@@ -132,13 +132,13 @@ class _HistoryPageState extends State<HistoryPage>
           ],
           backgroundColor: shadePinkColor,
           title: Text(
-            'HI USER!',
+            'HI ${FirebaseAuth.instance.currentUser?.displayName ?? "User"}!',
             style: titleTextStyle.copyWith(
               fontSize: 24,
             ),
           ),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         body: Padding(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
           child: SafeArea(
