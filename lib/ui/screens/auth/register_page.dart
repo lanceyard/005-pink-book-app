@@ -113,10 +113,15 @@ class _RegisterPageState extends State<RegisterPage> {
                   const SizedBox(
                     height: 24,
                   ),
-                  BlocBuilder<AuthBloc, AuthState>(
+                  BlocConsumer<AuthBloc, AuthState>(
+                    listener: (context, state) {
+                      if (state is AuthLoaded) {
+                        Navigator.popUntil(context, ModalRoute.withName('/'));
+                      }
+                    },
                     builder: (context, state) {
                       if (state is AuthLoading) {
-                      return const Center(child: CircularProgressIndicator());
+                        return const Center(child: CircularProgressIndicator());
                       }
                       return CustomFilledButton(
                         title: 'SIGN UP',
