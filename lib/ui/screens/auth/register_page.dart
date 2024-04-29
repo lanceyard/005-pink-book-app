@@ -1,5 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pink_book_app/logic/bloc/auth/auth_bloc.dart';
 import 'package:pink_book_app/ui/widget/button/filled_button.dart';
 import 'package:pink_book_app/ui/widget/button/text_button.dart';
 import 'package:pink_book_app/ui/widget/field/field.dart';
@@ -112,17 +113,25 @@ class _RegisterPageState extends State<RegisterPage> {
                   const SizedBox(
                     height: 24,
                   ),
-                  CustomFilledButton(
-                    title: 'SIGN UP',
-                    width: MediaQuery.of(context).size.width,
-                    height: 48,
-                    bgColor: basePinkColor,
-                    hvColor: oldRedColor,
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        createUserWithEmailAndPassword(
-                            emailController.text, passwordController.text);
+                  BlocBuilder<AuthBloc, AuthState>(
+                    builder: (context, state) {
+                      if (state is AuthLoading) {
+                      return const Center(child: CircularProgressIndicator());
                       }
+                      return CustomFilledButton(
+                        title: 'SIGN UP',
+                        width: MediaQuery.of(context).size.width,
+                        height: 48,
+                        bgColor: basePinkColor,
+                        hvColor: oldRedColor,
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            context.read<AuthBloc>().add(
+                                UserAuthRegisterPassword(emailController.text,
+                                    passwordController.text));
+                          }
+                        },
+                      );
                     },
                   ),
                   const SizedBox(
@@ -161,23 +170,5 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       ),
     );
-  }
-
-  Future<void> createUserWithEmailAndPassword(email, password) async {
-    try {
-      final credential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
-      }
-    } catch (e) {
-      print(e);
-    }
   }
 }

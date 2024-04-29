@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pink_book_app/logic/bloc/auth/auth_bloc.dart';
 import 'package:pink_book_app/ui/widget/theme/color_theme.dart';
 import 'package:pink_book_app/ui/widget/theme/text_theme.dart';
 
@@ -135,8 +136,7 @@ class _HistoryPageState extends State<HistoryPage>
                 icon: const Icon(Icons.info)),
             IconButton(
                 onPressed: () async {
-                  await GoogleSignIn().signOut();
-                  FirebaseAuth.instance.signOut();
+                  context.read<AuthBloc>().add(UserAuthLogout());
                 },
                 icon: const Icon(Icons.logout))
           ],

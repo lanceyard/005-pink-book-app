@@ -1,6 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pink_book_app/logic/bloc/auth/auth_bloc.dart';
 import 'package:pink_book_app/ui/widget/button/filled_button.dart';
 import 'package:pink_book_app/ui/widget/button/outlined_button.dart';
 import 'package:pink_book_app/ui/widget/button/text_button.dart';
@@ -101,8 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                         CustomTextButton(
                           text: 'Register ',
                           onPressed: () {
-                            Navigator.pushNamedAndRemoveUntil(
-                                context, '/register', (route) => false);
+                            Navigator.pushNamed(context, '/register');
                           },
                         ),
                         Text(
@@ -117,17 +116,24 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(
                     height: 16,
                   ),
-                  CustomFilledButton(
-                    title: 'SIGN IN',
-                    width: MediaQuery.of(context).size.width,
-                    height: 48,
-                    bgColor: basePinkColor,
-                    hvColor: oldRedColor,
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        signInWithEmailAndPassword(
-                            emailController.text, passwordController.text);
+                  BlocBuilder<AuthBloc, AuthState>(
+                    builder: (context, state) {
+                      if (state is AuthLoading) {
+                        return const Center(child: CircularProgressIndicator());
                       }
+                      return CustomFilledButton(
+                        title: 'SIGN IN',
+                        width: MediaQuery.of(context).size.width,
+                        height: 48,
+                        bgColor: basePinkColor,
+                        hvColor: oldRedColor,
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            context.read<AuthBloc>().add(UserAuthLoginPassword(
+                                emailController.text, passwordController.text));
+                          }
+                        },
+                      );
                     },
                   ),
                   const SizedBox(
@@ -153,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                     hvColor: shadePinkColor,
                     bgColor: basePinkColor,
                     onPressed: () {
-                      signInWithGoogle();
+                      context.read<AuthBloc>().add(UserAuthLoginGoogle());
                     },
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.18),
@@ -173,35 +179,5 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-  }
-
-  Future<void> signInWithGoogle() async {
-    GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
-    GoogleSignInAuthentication? gAuth = await gUser?.authentication;
-    AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: gAuth?.accessToken, idToken: gAuth?.idToken);
-
-    try {
-      await FirebaseAuth.instance.signInWithCredential(credential);
-    } on FirebaseAuthException catch (e) {
-      print(e.code);
-    }
-  }
-
-  Future<void> signInWithEmailAndPassword(email, password) async {
-    try {
-      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
-      }
-    } catch (e) {
-      print(e);
-    }
   }
 }
