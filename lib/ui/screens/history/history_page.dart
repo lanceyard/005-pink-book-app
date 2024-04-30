@@ -121,6 +121,8 @@ class _HistoryPageState extends State<HistoryPage>
     },
   ];
 
+    
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -199,7 +201,7 @@ class _HistoryPageState extends State<HistoryPage>
                                     iconSize: 16.0,
                                     onPressed: () {},
                                     icon: Icon(
-                                      Icons.save,
+                                      Icons.assignment,
                                       color: basePinkColor,
                                     ),
                                   ),
@@ -269,6 +271,7 @@ class _HistoryPageState extends State<HistoryPage>
               titleStyle: const TextStyle(fontSize: 14, color: Colors.white),
               onPress: () {
                 _animationController.reverse();
+                Navigator.pushNamed(context, '/result');
               },
             ),
           ],

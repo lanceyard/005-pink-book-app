@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pink_book_app/ui/screens/history/save_input.dart';
 import 'package:pink_book_app/ui/widget/Dialog/custom_alert_dialog.dart';
 import 'package:pink_book_app/ui/widget/button/filled_button.dart';
 import 'package:pink_book_app/ui/widget/field/dropdown.dart';
@@ -22,6 +23,7 @@ class _InputPageState extends State<InputPage> {
   final stomachController = TextEditingController();
   final weightController = TextEditingController();
   final momsageController = TextEditingController();
+  final notesController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -31,6 +33,7 @@ class _InputPageState extends State<InputPage> {
 
   List<XFile> imageFileList = [];
 
+//! Logic buat pengambilan image dari local
   void selectImage() async {
     if (imageFileList.length >= 3) {
       const snackBar = SnackBar(
@@ -51,13 +54,57 @@ class _InputPageState extends State<InputPage> {
     }
     setState(() {});
   }
-
+//! buat menghapus image yang sudah dipilih
   void removeImage(int index) {
     imageFileList.removeAt(index);
     setState(() {});
   }
 
   bool isLoading = false;
+
+//! ini buat nyatuin outputnya di class saveHistory
+//* skrng cuma ku print ngga di tampilin di class save_input
+  String? _selectedAlcoholTest;
+  String? _selectedPregnancyAge;
+  void saveInput() {
+    if (_formKey.currentState!.validate()) {
+      // Simpan semua data input ke dalam objek InputHistory
+      SaveHistory saveHistory = SaveHistory(
+        ogttTest: int.parse(ogttController.text),
+        oximeterTest: int.parse(oximeterController.text),
+        stomachDiameter: int.parse(stomachController.text),
+        weightGain: int.parse(weightController.text),
+        momsAge: int.parse(momsageController.text),
+        alcoholTest: _selectedAlcoholTest ??
+            '', 
+        pregnancyAge: int.parse(_selectedPregnancyAge ??
+            '0'),
+        imagePaths: imageFileList.map((image) => image.path).toList(),
+        additionalNotes: notesController.text,
+      );
+
+      // Cetak data input untuk verifikasi
+      printInputHistory(saveHistory);
+
+      // Tambahkan logika penyimpanan ke database atau penyimpanan lainnya
+
+      // Redirect ke halaman hasil
+      // Navigator.pushReplacementNamed(context, '/result');
+    }
+  }
+
+  void printInputHistory(SaveHistory saveHistory) {
+    print('OGTT Test: ${saveHistory.ogttTest}');
+    print('Oximeter Test: ${saveHistory.oximeterTest}');
+    print('Stomach Diameter: ${saveHistory.stomachDiameter}');
+    print('Weight Gain: ${saveHistory.weightGain}');
+    print('Mom\'s Age: ${saveHistory.momsAge}');
+    print('Alcohol Test: ${saveHistory.alcoholTest}');
+    print('Pregnancy Age: ${saveHistory.pregnancyAge}');
+    print('Image Paths:');
+    saveHistory.imagePaths.forEach((path) => print(path));
+    print('Additional Notes: ${saveHistory.additionalNotes}');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -251,7 +298,13 @@ class _InputPageState extends State<InputPage> {
                       DropdownField(
                         isLoading: false,
                         items: const ['Positive', 'Negative'],
-                        selectedItem: '', // Initial selection
+                        selectedItem: _selectedAlcoholTest,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedAlcoholTest =
+                                value; // Simpan nilai yang dipilih
+                          });
+                        },
                         validator: (val) {
                           if (val == null || val.isEmpty) {
                             return 'Please select a Alcochol Test';
@@ -286,7 +339,13 @@ class _InputPageState extends State<InputPage> {
                           '11',
                           '12'
                         ],
-                        selectedItem: '', // Initial selection
+                        selectedItem: _selectedPregnancyAge,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedPregnancyAge =
+                                value; // Simpan nilai yang dipilih
+                          });
+                        },
                         validator: (val) {
                           if (val == null || val.isEmpty) {
                             return 'Please select a Pregnancy Age';
@@ -409,9 +468,10 @@ class _InputPageState extends State<InputPage> {
                           constraints: BoxConstraints(
                             maxWidth: MediaQuery.of(context).size.width - 40,
                           ),
-                          child: const TextField(
+                          child: TextField(
+                            controller: notesController,
                             maxLines: null,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               border: InputBorder.none,
                               hintText: 'Type here...',
                             ),
@@ -434,11 +494,12 @@ class _InputPageState extends State<InputPage> {
                         height: 48,
                         bgColor: oldRedColor,
                         hvColor: basePinkColor,
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            Navigator.pushReplacementNamed(context, '/result');
-                          }
-                        },
+                        onPressed: saveInput,
+                        // onPressed: () {
+                        //   if (_formKey.currentState!.validate()) {
+                        //     Navigator.pushReplacementNamed(context, '/result');
+                        //   }
+                        // },
                       )
                     ],
                   ),
@@ -451,3 +512,4 @@ class _InputPageState extends State<InputPage> {
     );
   }
 }
+

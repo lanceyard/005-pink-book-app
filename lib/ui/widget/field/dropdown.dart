@@ -4,14 +4,15 @@ import 'package:pink_book_app/ui/widget/theme/text_theme.dart';
 
 class DropdownField extends StatefulWidget {
   const DropdownField({
-    super.key,
+    Key? key,
     required this.isLoading,
     this.label,
     required this.items,
     this.hint,
     this.selectedItem,
     this.validator,
-  });
+    this.onChanged, // Tambahkan properti onChanged
+  }) : super(key: key);
 
   final bool isLoading;
   final String? label;
@@ -19,6 +20,7 @@ class DropdownField extends StatefulWidget {
   final String? hint;
   final String? selectedItem;
   final String? Function(String?)? validator;
+  final ValueChanged<String>? onChanged; // Tambahkan properti onChanged
 
   @override
   State<DropdownField> createState() => _DropdownFieldState();
@@ -26,11 +28,21 @@ class DropdownField extends StatefulWidget {
 
 class _DropdownFieldState extends State<DropdownField> {
   String? _selectedValue;
+  
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
       value: _selectedValue, // Pre-select based on initial value
       validator: widget.validator,
+      onChanged: (value) {
+        setState(() {
+          _selectedValue = value; // Update selected value
+        });
+        if (widget.onChanged != null) {
+          widget.onChanged!(value!); // Panggil onChanged jika tersedia
+        }
+        print('Selected value: $_selectedValue');
+      },
       decoration: InputDecoration(
         labelText: widget.label,
         labelStyle: hintTextStyle,
@@ -55,12 +67,6 @@ class _DropdownFieldState extends State<DropdownField> {
           child: Text(item, style: hintTextStyle),
         );
       }).toList(),
-      onChanged: (value) {
-        setState(() {
-          _selectedValue = value;
-        });
-        // print('Selected value: $_selectedValue');
-      },
       disabledHint: widget.isLoading ? const Text('Loading...') : null,
     );
   }
