@@ -43,10 +43,7 @@ class _AuthPageState extends State<AuthPage> {
               if (snapshot.data == null) {
                 return const LoginPage();
               } else {
-                return BlocProvider(
-                  create: (context) => HistoryBloc(),
-                  child: const HistoryPage(),
-                );
+                return const HistoryPage();
               }
             }
             return const Center(

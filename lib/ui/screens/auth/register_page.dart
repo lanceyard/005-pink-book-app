@@ -147,7 +147,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       alignment: WrapAlignment.center,
                       children: [
                         Text(
-                          "Already have account? you can ",
+                          "Already have an account? you can ",
                           style: subHeaderTextStyle.copyWith(
                             fontSize: 16,
                           ),

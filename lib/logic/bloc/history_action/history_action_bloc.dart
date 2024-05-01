@@ -18,6 +18,7 @@ class HistoryActionBloc extends Bloc<HistoryActionEvent, HistoryActionState> {
     }
 
     on<HistoryActionAddEvent>((event, emit) async {
+      emit(HistoryActionLoading());
       final uid = await getUserUID();
       if (uid != null) {
         final historiesRef = FirebaseFirestore.instance.collection("histories");
@@ -27,14 +28,19 @@ class HistoryActionBloc extends Bloc<HistoryActionEvent, HistoryActionState> {
         historyMap['date'] =
             DateFormat('dd-MM-yyyy HH:mm').format(DateTime.now());
         historyMap['uid'] = uid;
-        print(historyMap);
 
+        print(historyMap);
         try {
           await historiesRef.add(historyMap);
+          emit(HistoryActionSuccess());
         } catch (e) {
           emit(HistoryActionError(e.toString()));
         }
       }
     });
+
+    on<HistoryActionDeleteEvent>((event, emit) async {});
+    on<HistoryActionDetailEvent>((event, emit) async {});
+    on<HistoryActionUpdateDetailEvent>((event, emit) async {});
   }
 }

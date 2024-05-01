@@ -468,15 +468,31 @@ class _InputPageState extends State<InputPage> {
                       const SizedBox(
                         height: 24,
                       ),
-                      CustomFilledButton(
-                        title: 'Save',
-                        width: MediaQuery.of(context).size.width,
-                        height: 48,
-                        bgColor: oldRedColor,
-                        hvColor: basePinkColor,
-                        // onPressed: saveInput,
-                        onPressed: () {
-                        // context.read<HistoryActionAddEvent>().add(HistoryActionAddEvent(saveInput()));
+                      BlocConsumer<HistoryActionBloc, HistoryActionState>(
+                        listener: (context, state) {
+                          if (state is HistoryActionSuccess) {
+                            Navigator.popUntil(
+                                context, ModalRoute.withName('/'));
+                          }
+                        },
+                        builder: (context, state) {
+                          if (state is HistoryActionLoading) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+                          return CustomFilledButton(
+                            title: 'Save',
+                            width: MediaQuery.of(context).size.width,
+                            height: 48,
+                            bgColor: oldRedColor,
+                            hvColor: basePinkColor,
+                            // onPressed: saveInput,
+                            onPressed: () {
+                              context
+                                  .read<HistoryActionBloc>()
+                                  .add(HistoryActionAddEvent(saveInput()));
+                            },
+                          );
                         },
                       )
                     ],
