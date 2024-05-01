@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pink_book_app/logic/bloc/auth/auth_bloc.dart';
 import 'package:pink_book_app/logic/model/save_history.dart';
+import 'package:pink_book_app/ui/screens/history/input_page.dart';
 import 'package:pink_book_app/ui/widget/button/outlined_button.dart';
 import 'package:pink_book_app/ui/widget/theme/color_theme.dart';
 import 'package:pink_book_app/ui/widget/theme/text_theme.dart';
@@ -151,9 +152,6 @@ class _HistoryPageState extends State<HistoryPage>
                   const SizedBox(
                     height: 16,
                   ),
-                  const SizedBox(
-                    height: 16,
-                  ),
                   _historyData.isEmpty
                       ? SizedBox(
                           height: MediaQuery.of(context).size.height * 0.2,
@@ -226,8 +224,17 @@ class _HistoryPageState extends State<HistoryPage>
                                         IconButton(
                                           iconSize: 16.0,
                                           onPressed: () {
-                                            Navigator.pushNamed(
-                                                context, '/input');
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => InputPage(
+                                                  saveHistory: _historyData[
+                                                      index], // Misalkan ini adalah data yang akan diedit
+                                                  isEditing:
+                                                      true, // Tandai bahwa ini adalah sesi editing, bukan membuat baru
+                                                ),
+                                              ),
+                                            );
                                           },
                                           icon: Icon(
                                             Icons.edit,
