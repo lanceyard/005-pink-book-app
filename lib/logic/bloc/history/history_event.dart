@@ -2,11 +2,11 @@ part of 'history_bloc.dart';
 
 abstract class HistoryEvent {}
 
-class HistorySaveEvent extends HistoryEvent {
-  SaveHistory saveInput;
-  HistorySaveEvent(this.saveInput);
-}
-
+// class HistorySaveEvent extends HistoryEvent {
+//   SaveHistory saveInput;
+//   HistorySaveEvent(this.saveInput);
+// }
+//
 class HistoryUpdateEvent extends HistoryEvent {
   SaveHistory saveInput;
   HistoryUpdateEvent(this.saveInput);

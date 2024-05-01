@@ -32,7 +32,7 @@ class _HistoryPageState extends State<HistoryPage>
         CurvedAnimation(curve: Curves.easeInOut, parent: _animationController);
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
 
-		getHistoryDocuments();
+    getHistoryDocuments();
   }
 
   getHistoryDocuments() async {

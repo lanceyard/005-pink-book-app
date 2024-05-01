@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pink_book_app/logic/bloc/auth/auth_bloc.dart';
 import 'package:pink_book_app/logic/bloc/history/history_bloc.dart';
+import 'package:pink_book_app/logic/bloc/history_action/history_action_bloc.dart';
 import 'package:pink_book_app/ui/screens/auth/auth_page.dart';
 import 'package:pink_book_app/ui/screens/auth/login_page.dart';
 import 'package:pink_book_app/ui/screens/auth/register_page.dart';
@@ -36,7 +37,9 @@ class MyApp extends StatelessWidget {
       BlocProvider(
         create: (context) => AuthBloc()),
       BlocProvider(
-        create: (context) => HistoryBloc())
+        create: (context) => HistoryBloc()),
+      BlocProvider(
+        create: (context) => HistoryActionBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
