@@ -14,6 +14,6 @@ class HistoryUpdateEvent extends HistoryEvent {
 
 class HistoryRemoveEvent extends HistoryEvent {}
 
-class HistoryGetEvent extends HistoryEvent {}
+class HistoryGetAllEvent extends HistoryEvent {}
 
 class HistoryGetSpecificEvent extends HistoryEvent {}

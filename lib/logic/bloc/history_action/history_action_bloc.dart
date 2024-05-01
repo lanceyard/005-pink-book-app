@@ -39,8 +39,38 @@ class HistoryActionBloc extends Bloc<HistoryActionEvent, HistoryActionState> {
       }
     });
 
-    on<HistoryActionDeleteEvent>((event, emit) async {});
+    on<HistoryActionDeleteEvent>((event, emit) async {
+      final collection = FirebaseFirestore.instance.collection('histories');
+      final docRef = collection.doc(event.id);
+      await docRef
+          .delete()
+          .then((value) => print("Document deleted successfully!"))
+          .catchError((error) => print("Error deleting document"));
+    });
+
+    on<HistoryActionUpdateDetailEvent>((event, emit) async {
+      emit(HistoryActionLoading());
+      final uid = await getUserUID();
+      if (uid != null) {
+        final historiesRef = FirebaseFirestore.instance.collection("histories");
+        final historyMap = event.saveInput.toMap(event.saveInput);
+        final docRef = historiesRef.doc(event.id);
+
+        // [[ additional input for history ]]
+        historyMap['date'] =
+            DateFormat('dd-MM-yyyy HH:mm').format(DateTime.now());
+        historyMap['uid'] = uid;
+
+        print(historyMap);
+        try {
+          await docRef.set(historyMap);
+          emit(HistoryActionSuccess());
+        } catch (e) {
+          emit(HistoryActionError(e.toString()));
+        }
+      }
+    });
+
     on<HistoryActionDetailEvent>((event, emit) async {});
-    on<HistoryActionUpdateDetailEvent>((event, emit) async {});
   }
 }

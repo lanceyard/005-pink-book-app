@@ -35,6 +35,7 @@ class _AuthPageState extends State<AuthPage> {
       child: StreamBuilder<User?>(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (BuildContext context, snapshot) {
+            context.read<HistoryBloc>().add(HistoryGetAllEvent());
             if (snapshot.hasError) {
               return Text("Something occured, ${snapshot.error.toString()}");
             }

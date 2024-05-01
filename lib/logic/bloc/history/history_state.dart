@@ -4,6 +4,8 @@ abstract class HistoryState {}
 
 class HistoryInitial extends HistoryState {}
 
+class HistoryLoading extends HistoryState {}
+
 class HistoryLoaded extends HistoryState {
   List<SaveHistory> listHistory;
   HistoryLoaded(this.listHistory);

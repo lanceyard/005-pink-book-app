@@ -10,6 +10,7 @@ class SaveHistory {
       required this.imagePaths,
       required this.additionalNotes,
       this.date = '',
+      this.id = '',
       this.uid = ''});
 
   final int ogttTest;
@@ -23,6 +24,7 @@ class SaveHistory {
   final String additionalNotes;
   final String uid;
   final String date;
+  final String id;
 
   factory SaveHistory.fromMap(Map<String, dynamic> map) {
     return SaveHistory(
@@ -37,6 +39,7 @@ class SaveHistory {
       additionalNotes: map['additionalNotes'] ?? '',
       date: map['date'] ?? '',
       uid: map['uid'] ?? '',
+      id: map['id'] ?? '',
     );
   }
 
@@ -53,6 +56,7 @@ class SaveHistory {
       'additionalNotes': history.additionalNotes,
       'uid': history.uid,
       'date': history.date,
+      'id': history.id,
     };
   }
 }

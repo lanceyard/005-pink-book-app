@@ -1,9 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pink_book_app/logic/bloc/auth/auth_bloc.dart';
+import 'package:pink_book_app/logic/bloc/history/history_bloc.dart';
 import 'package:pink_book_app/logic/bloc/history_action/history_action_bloc.dart';
 import 'package:pink_book_app/logic/model/save_history.dart';
 import 'package:pink_book_app/ui/screens/history/input_page.dart';
@@ -28,6 +28,8 @@ class _HistoryPageState extends State<HistoryPage>
   late Animation<double> _animation;
   late AnimationController _animationController;
 
+  final List<SaveHistory> _historyData = [];
+
   @override
   void initState() {
     super.initState();
@@ -39,44 +41,7 @@ class _HistoryPageState extends State<HistoryPage>
     final curvedAnimation =
         CurvedAnimation(curve: Curves.easeInOut, parent: _animationController);
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
-
-    getHistoryDocuments();
   }
-
-  getHistoryDocuments() async {
-    try {
-      final currentUid = FirebaseAuth.instance.currentUser!.uid;
-      final collection = FirebaseFirestore.instance.collection('histories');
-      final querySnapshot =
-          await collection.where('uid', isEqualTo: currentUid).get();
-      _historyData.clear();
-      for (var doc in querySnapshot.docs) {
-        final data = doc.data();
-        final SaveHistory sH = SaveHistory.fromMap(data);
-        setState(() {
-          _historyData.add(sH);
-        });
-      }
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
-  Future<void> refreshData() async {
-    // Tambahkan penundaan 2 detik
-    await Future.delayed(const Duration(seconds: 2));
-    setState(() {
-      //! ini kalo mau ditambah loading beb
-      // isLoading = true;
-    });
-    await getHistoryDocuments();
-    setState(() {
-      // isLoading = false;
-    });
-  }
-
-  //? Dummy Data
-  final List<SaveHistory> _historyData = [];
 
   void _sort<T>(Comparable<T> Function(SaveHistory sh) getField,
       int columnIndex, bool ascending) {
@@ -127,18 +92,9 @@ class _HistoryPageState extends State<HistoryPage>
               actions: [
                 IconButton(
                     onPressed: () {
-                      refreshData();
+                      context.read<HistoryBloc>().add(HistoryGetAllEvent());
                     },
                     icon: const Icon(Icons.refresh)),
-                IconButton(
-                    onPressed: () async {
-                      const snackBar = SnackBar(
-                        content:
-                            Text('PINK BOOK APP by BIMA ANGGARA WIRASATYA!'),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    },
-                    icon: const Icon(Icons.info)),
                 IconButton(
                     onPressed: () async {
                       context.read<AuthBloc>().add(UserAuthLogout());
@@ -181,138 +137,171 @@ class _HistoryPageState extends State<HistoryPage>
                       const SizedBox(
                         height: 16,
                       ),
-                      _historyData.isEmpty
-                          ? SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.2,
-                              child: Center(
-                                child: Text(
-                                  'The data history is still empty, please fill in the data first.',
-                                  style: subHeaderTextStyle.copyWith(
-                                    fontSize: 16,
+                      BlocConsumer<HistoryBloc, HistoryState>(
+                          listener: (context, state) {
+                        if (state is HistoryInitial) {
+                          context.read<HistoryBloc>().add(HistoryGetAllEvent());
+                        }
+                        if (state is HistoryLoaded) {
+                          _historyData.clear();
+                          _historyData.addAll(state.listHistory);
+                          setState(() {});
+                        }
+                      }, builder: (context, state) {
+                        if (state is HistoryLoading) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+                        return _historyData.isEmpty
+                            ? SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.2,
+                                child: Center(
+                                  child: Text(
+                                    'The data history is still empty, please fill in the data first.',
+                                    style: subHeaderTextStyle.copyWith(
+                                      fontSize: 16,
+                                    ),
+                                    textAlign: TextAlign.center,
                                   ),
-                                  textAlign: TextAlign.center,
                                 ),
-                              ),
-                            )
-                          : SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: DataTable(
-                                sortColumnIndex: _sortColumnIndex,
-                                sortAscending: _isAscending,
-                                headingRowColor:
-                                    MaterialStateProperty.all(shadePinkColor),
-                                columns: [
-                                  DataColumn(
-                                    label: const Text('Date'),
-                                    onSort: (columnIndex, ascending) =>
-                                        _sort<String>(
-                                            (SaveHistory sh) => sh.date,
-                                            columnIndex,
-                                            ascending),
-                                  ),
-                                  DataColumn(
-                                    label: const Text('Month'),
-                                    onSort: (columnIndex, ascending) =>
-                                        _sort<String>(
-                                            (SaveHistory sh) =>
-                                                sh.pregnancyAge.toString(),
-                                            columnIndex,
-                                            ascending),
-                                  ),
-                                  DataColumn(
-                                    label: const Text('Time'),
-                                    onSort: (columnIndex, ascending) =>
-                                        _sort<String>(
-                                            (SaveHistory sh) => sh.date,
-                                            columnIndex,
-                                            ascending),
-                                  ),
-                                  const DataColumn(label: Text('Action')),
-                                ],
-                                rows: List.generate(
-                                  _historyData.length,
-                                  (index) => DataRow(
-                                    cells: [
-                                      // put it here
-                                      DataCell(Text(_historyData[index].date)),
-                                      DataCell(Text(_historyData[index]
-                                          .pregnancyAge
-                                          .toString())),
-                                      DataCell(Text(_historyData[index].date)),
-                                      DataCell(
-                                        Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            IconButton(
-                                              iconSize: 16.0,
-                                              onPressed: () {
-                                                Navigator.pushNamed(
-                                                    context, '/result');
-                                              },
-                                              icon: Icon(
-                                                Icons.assignment,
-                                                color: basePinkColor,
+                              )
+                            : SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: DataTable(
+                                  sortColumnIndex: _sortColumnIndex,
+                                  sortAscending: _isAscending,
+                                  headingRowColor:
+                                      MaterialStateProperty.all(shadePinkColor),
+                                  columns: [
+                                    DataColumn(
+                                      label: const Text('Date'),
+                                      onSort: (columnIndex, ascending) =>
+                                          _sort<String>(
+                                              (SaveHistory sh) => sh.date,
+                                              columnIndex,
+                                              ascending),
+                                    ),
+                                    DataColumn(
+                                      label: const Text('Month'),
+                                      onSort: (columnIndex, ascending) =>
+                                          _sort<String>(
+                                              (SaveHistory sh) =>
+                                                  sh.pregnancyAge.toString(),
+                                              columnIndex,
+                                              ascending),
+                                    ),
+                                    DataColumn(
+                                      label: const Text('Time'),
+                                      onSort: (columnIndex, ascending) =>
+                                          _sort<String>(
+                                              (SaveHistory sh) => sh.date,
+                                              columnIndex,
+                                              ascending),
+                                    ),
+                                    const DataColumn(label: Text('Action')),
+                                  ],
+                                  rows: List.generate(
+                                    _historyData.length,
+                                    (index) => DataRow(
+                                      cells: [
+                                        // put it here
+                                        DataCell(
+                                            Text(_historyData[index].date)),
+                                        DataCell(Text(_historyData[index]
+                                            .pregnancyAge
+                                            .toString())),
+                                        DataCell(
+                                            Text(_historyData[index].date)),
+                                        DataCell(
+                                          Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              IconButton(
+                                                iconSize: 16.0,
+                                                onPressed: () {
+                                                  Navigator.pushNamed(
+                                                      context, '/result');
+                                                },
+                                                icon: Icon(
+                                                  Icons.assignment,
+                                                  color: basePinkColor,
+                                                ),
                                               ),
-                                            ),
-                                            IconButton(
-                                              iconSize: 16.0,
-                                              onPressed: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        InputPage(
-                                                      saveHistory: _historyData[
-                                                          index], // Misalkan ini adalah data yang akan diedit
-                                                      isEditing:
-                                                          true, // Tandai bahwa ini adalah sesi editing, bukan membuat baru
+                                              IconButton(
+                                                iconSize: 16.0,
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          InputPage(
+                                                        saveHistory: _historyData[
+                                                            index], // Misalkan ini adalah data yang akan diedit
+                                                        isEditing:
+                                                            true, // Tandai bahwa ini adalah sesi editing, bukan membuat baru
+                                                      ),
                                                     ),
-                                                  ),
-                                                );
-                                              },
-                                              icon: Icon(
-                                                Icons.edit,
-                                                color: basePinkColor,
+                                                  );
+                                                },
+                                                icon: Icon(
+                                                  Icons.edit,
+                                                  color: basePinkColor,
+                                                ),
                                               ),
-                                            ),
-                                            IconButton(
-                                              iconSize: 16.0,
-                                              onPressed: () {},
-                                              icon: Icon(
-                                                Icons.delete,
-                                                color: basePinkColor,
+                                              IconButton(
+                                                iconSize: 16.0,
+                                                onPressed: () {
+                                                  context
+                                                      .read<HistoryActionBloc>()
+                                                      .add(
+                                                          HistoryActionDeleteEvent(
+                                                              _historyData[
+                                                                      index]
+                                                                  .id));
+
+                                                  context
+                                                      .read<HistoryBloc>()
+                                                      .add(
+                                                          HistoryGetAllEvent());
+                                                },
+                                                icon: Icon(
+                                                  Icons.delete,
+                                                  color: basePinkColor,
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
+                              );
+                      })
                     ],
                   ),
                 ),
               ),
             ),
-            // floatingActionButton: FloatingActionButton(
-            //   onPressed: () {},
-            //   backgroundColor: basePinkColor,
-            //   shape: RoundedRectangleBorder(
-            //     borderRadius: BorderRadius.circular(26.0),
-            //   ),
-            //   child: const Icon(
-            //     Icons.add,
-            //     color: Colors.white,
-            //     size: 40,
-            //   ),
-            // ),
-            //Init Floating Action Bubble
             floatingActionButton: FloatingActionBubble(
               // Menu items
               items: <Bubble>[
                 // Floating action menu item
+                Bubble(
+                    title: "App Info",
+                    iconColor: Colors.white,
+                    titleStyle:
+                        const TextStyle(fontSize: 14, color: Colors.white),
+                    bubbleColor: basePinkColor,
+                    onPress: () async {
+                      const snackBar = SnackBar(
+                        content:
+                            Text('PINK BOOK APP by BIMA ANGGARA WIRASATYA!'),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    },
+                    icon: Icons.info),
                 Bubble(
                   title: "Input Data",
                   iconColor: Colors.white,
@@ -323,17 +312,6 @@ class _HistoryPageState extends State<HistoryPage>
                   onPress: () {
                     _animationController.reverse();
                     Navigator.pushNamed(context, '/input');
-                  },
-                ),
-                Bubble(
-                  title: "See Firebase",
-                  iconColor: Colors.white,
-                  bubbleColor: basePinkColor,
-                  icon: Icons.refresh,
-                  titleStyle:
-                      const TextStyle(fontSize: 14, color: Colors.white),
-                  onPress: () {
-                    getHistoryDocuments();
                   },
                 ),
               ],

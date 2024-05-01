@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pink_book_app/logic/bloc/history/history_bloc.dart';
 import 'package:pink_book_app/logic/bloc/history_action/history_action_bloc.dart';
 import 'package:pink_book_app/logic/model/save_history.dart';
 import 'package:pink_book_app/ui/widget/Dialog/custom_alert_dialog.dart';
@@ -531,9 +532,19 @@ class _InputPageState extends State<InputPage> {
                             bgColor: oldRedColor,
                             hvColor: basePinkColor,
                             onPressed: () {
+                              if (widget.isEditing) {
+                                context
+                                    .read<HistoryActionBloc>()
+                                    .add(HistoryActionUpdateDetailEvent(widget.saveHistory!.id, saveInput()));
+                              } else {
+                                context
+                                    .read<HistoryActionBloc>()
+                                    .add(HistoryActionAddEvent(saveInput()));
+                              }
+
                               context
-                                  .read<HistoryActionBloc>()
-                                  .add(HistoryActionAddEvent(saveInput()));
+                                  .read<HistoryBloc>()
+                                  .add(HistoryGetAllEvent());
                             },
                           );
                         },
