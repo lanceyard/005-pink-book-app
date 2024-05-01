@@ -5,8 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pink_book_app/logic/bloc/auth/auth_bloc.dart';
 import 'package:pink_book_app/logic/model/save_history.dart';
+import 'package:pink_book_app/ui/widget/button/outlined_button.dart';
 import 'package:pink_book_app/ui/widget/theme/color_theme.dart';
 import 'package:pink_book_app/ui/widget/theme/text_theme.dart';
+
+//! TO DO
+//* Tinggal buton edit sama delete
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
@@ -17,6 +21,8 @@ class HistoryPage extends StatefulWidget {
 
 class _HistoryPageState extends State<HistoryPage>
     with SingleTickerProviderStateMixin {
+  int _sortColumnIndex = 0;
+  bool _isAscending = true;
   late Animation<double> _animation;
   late AnimationController _animationController;
 
@@ -32,7 +38,7 @@ class _HistoryPageState extends State<HistoryPage>
         CurvedAnimation(curve: Curves.easeInOut, parent: _animationController);
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
 
-		getHistoryDocuments();
+    getHistoryDocuments();
   }
 
   getHistoryDocuments() async {
@@ -54,14 +60,50 @@ class _HistoryPageState extends State<HistoryPage>
     }
   }
 
+  Future<void> refreshData() async {
+    // Tambahkan penundaan 2 detik
+    await Future.delayed(const Duration(seconds: 2));
+    setState(() {
+      //! ini kalo mau ditambah loading beb
+      // isLoading = true;
+    });
+    await getHistoryDocuments();
+    setState(() {
+      // isLoading = false;
+    });
+  }
+
   //? Dummy Data
   final List<SaveHistory> _historyData = [];
+
+  void _sort<T>(Comparable<T> Function(SaveHistory sh) getField,
+      int columnIndex, bool ascending) {
+    _historyData.sort((SaveHistory a, SaveHistory b) {
+      if (!ascending) {
+        final SaveHistory c = a;
+        a = b;
+        b = c;
+      }
+      final Comparable<T> aValue = getField(a);
+      final Comparable<T> bValue = getField(b);
+      return Comparable.compare(aValue, bValue);
+    });
+    setState(() {
+      _sortColumnIndex = columnIndex;
+      _isAscending = ascending;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           actions: [
+            IconButton(
+                onPressed: () {
+                  refreshData();
+                },
+                icon: const Icon(Icons.refresh)),
             IconButton(
                 onPressed: () async {
                   const snackBar = SnackBar(
@@ -109,62 +151,105 @@ class _HistoryPageState extends State<HistoryPage>
                   const SizedBox(
                     height: 16,
                   ),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: DataTable(
-                      headingRowColor:
-                          MaterialStateProperty.all(shadePinkColor),
-                      columns: const [
-                        DataColumn(label: Text('Date')),
-                        DataColumn(label: Text('Month')),
-                        DataColumn(label: Text('Time')),
-                        DataColumn(label: Text('Action')),
-                      ],
-                      rows: List.generate(
-                        _historyData.length,
-                        (index) => DataRow(
-                          cells: [
-                            // put it here
-                            DataCell(Text(_historyData[index].date)),
-                            DataCell(Text(
-                                _historyData[index].pregnancyAge.toString())),
-                            DataCell(Text(_historyData[index].date)),
-                            DataCell(
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  IconButton(
-                                    iconSize: 16.0,
-                                    onPressed: () {},
-                                    icon: Icon(
-                                      Icons.assignment,
-                                      color: basePinkColor,
-                                    ),
-                                  ),
-                                  IconButton(
-                                    iconSize: 16.0,
-                                    onPressed: () {},
-                                    icon: Icon(
-                                      Icons.edit,
-                                      color: basePinkColor,
-                                    ),
-                                  ),
-                                  IconButton(
-                                    iconSize: 16.0,
-                                    onPressed: () {},
-                                    icon: Icon(
-                                      Icons.delete,
-                                      color: basePinkColor,
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  _historyData.isEmpty
+                      ? SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.2,
+                          child: Center(
+                            child: Text(
+                              'The data history is still empty, please fill in the data first.',
+                              style: subHeaderTextStyle.copyWith(
+                                fontSize: 16,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        )
+                      : SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: DataTable(
+                            sortColumnIndex: _sortColumnIndex,
+                            sortAscending: _isAscending,
+                            headingRowColor:
+                                MaterialStateProperty.all(shadePinkColor),
+                            columns: [
+                              DataColumn(
+                                label: const Text('Date'),
+                                onSort: (columnIndex, ascending) =>
+                                    _sort<String>((SaveHistory sh) => sh.date,
+                                        columnIndex, ascending),
+                              ),
+                              DataColumn(
+                                label: const Text('Month'),
+                                onSort: (columnIndex, ascending) =>
+                                    _sort<String>(
+                                        (SaveHistory sh) =>
+                                            sh.pregnancyAge.toString(),
+                                        columnIndex,
+                                        ascending),
+                              ),
+                              DataColumn(
+                                label: const Text('Time'),
+                                onSort: (columnIndex, ascending) =>
+                                    _sort<String>((SaveHistory sh) => sh.date,
+                                        columnIndex, ascending),
+                              ),
+                              const DataColumn(label: Text('Action')),
+                            ],
+                            rows: List.generate(
+                              _historyData.length,
+                              (index) => DataRow(
+                                cells: [
+                                  // put it here
+                                  DataCell(Text(_historyData[index].date)),
+                                  DataCell(Text(_historyData[index]
+                                      .pregnancyAge
+                                      .toString())),
+                                  DataCell(Text(_historyData[index].date)),
+                                  DataCell(
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        IconButton(
+                                          iconSize: 16.0,
+                                          onPressed: () {
+                                            Navigator.pushNamed(
+                                                context, '/result');
+                                          },
+                                          icon: Icon(
+                                            Icons.assignment,
+                                            color: basePinkColor,
+                                          ),
+                                        ),
+                                        IconButton(
+                                          iconSize: 16.0,
+                                          onPressed: () {
+                                            Navigator.pushNamed(
+                                                context, '/input');
+                                          },
+                                          icon: Icon(
+                                            Icons.edit,
+                                            color: basePinkColor,
+                                          ),
+                                        ),
+                                        IconButton(
+                                          iconSize: 16.0,
+                                          onPressed: () {},
+                                          icon: Icon(
+                                            Icons.delete,
+                                            color: basePinkColor,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
