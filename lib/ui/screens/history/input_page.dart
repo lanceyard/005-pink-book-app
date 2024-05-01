@@ -7,13 +7,14 @@ import 'package:pink_book_app/logic/bloc/history_action/history_action_bloc.dart
 import 'package:pink_book_app/logic/model/save_history.dart';
 import 'package:pink_book_app/ui/widget/Dialog/custom_alert_dialog.dart';
 import 'package:pink_book_app/ui/widget/button/filled_button.dart';
-import 'package:pink_book_app/ui/widget/field/dropdown.dart';
 import 'package:pink_book_app/ui/widget/field/inputField.dart';
 import 'package:pink_book_app/ui/widget/theme/color_theme.dart';
 import 'package:pink_book_app/ui/widget/theme/text_theme.dart';
 
 class InputPage extends StatefulWidget {
-  const InputPage({super.key});
+  final SaveHistory? saveHistory;
+  final bool isEditing;
+  const InputPage({super.key, this.saveHistory, this.isEditing = false});
 
   @override
   State<InputPage> createState() => _InputPageState();
@@ -34,6 +35,23 @@ class _InputPageState extends State<InputPage> {
   final ImagePicker imagePicker = ImagePicker();
 
   List<XFile> imageFileList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isEditing && widget.saveHistory != null) {
+      ogttController.text = widget.saveHistory!.ogttTest.toString();
+      oximeterController.text = widget.saveHistory!.oximeterTest.toString();
+      stomachController.text = widget.saveHistory!.stomachDiameter.toString();
+      weightController.text = widget.saveHistory!.weightGain.toString();
+      momsageController.text = widget.saveHistory!.momsAge.toString();
+      _selectedAlcoholTest = widget.saveHistory!.alcoholTest;
+      _selectedPregnancyAge = widget.saveHistory!.pregnancyAge.toString();
+      imageFileList =
+          widget.saveHistory!.imagePaths.map((path) => XFile(path)).toList();
+      notesController.text = widget.saveHistory!.additionalNotes.toString();
+    }
+  }
 
 //! Logic buat pengambilan image dari local
   void selectImage() async {
@@ -66,7 +84,6 @@ class _InputPageState extends State<InputPage> {
   bool isLoading = false;
 
 //! ini buat nyatuin outputnya di class saveHistory
-//* skrng cuma ku print ngga di tampilin di class save_input
   String? _selectedAlcoholTest;
   String? _selectedPregnancyAge;
 
@@ -275,14 +292,34 @@ class _InputPageState extends State<InputPage> {
                       const SizedBox(
                         height: 10,
                       ),
-                      DropdownField(
-                        isLoading: false,
-                        items: const ['Positive', 'Negative'],
-                        selectedItem: _selectedAlcoholTest,
-                        onChanged: (value) {
+                      DropdownButtonFormField(
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.all(10),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: oldRedColor),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: oldRedColor),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        value: _selectedAlcoholTest,
+                        items: ['Positive', 'Negative'].map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: hintTextStyle,
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
                           setState(() {
-                            _selectedAlcoholTest =
-                                value; // Simpan nilai yang dipilih
+                            _selectedAlcoholTest = newValue;
                           });
                         },
                         validator: (val) {
@@ -302,28 +339,35 @@ class _InputPageState extends State<InputPage> {
                       const SizedBox(
                         height: 10,
                       ),
-                      DropdownField(
-                        isLoading: false,
-                        items: const [
-                          '0',
-                          '1',
-                          '2',
-                          '3',
-                          '4',
-                          '5',
-                          '6',
-                          '7',
-                          '8',
-                          '9',
-                          '10',
-                          '11',
-                          '12'
-                        ],
-                        selectedItem: _selectedPregnancyAge,
-                        onChanged: (value) {
+                      DropdownButtonFormField(
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.all(10),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: oldRedColor),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: oldRedColor),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        value: _selectedPregnancyAge,
+                        items: List.generate(13, (index) => index.toString())
+                            .map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: hintTextStyle,
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
                           setState(() {
-                            _selectedPregnancyAge =
-                                value; // Simpan nilai yang dipilih
+                            _selectedPregnancyAge = newValue;
                           });
                         },
                         validator: (val) {
@@ -481,12 +525,11 @@ class _InputPageState extends State<InputPage> {
                                 child: CircularProgressIndicator());
                           }
                           return CustomFilledButton(
-                            title: 'Save',
+                            title: widget.isEditing ? 'Update' : 'Save',
                             width: MediaQuery.of(context).size.width,
                             height: 48,
                             bgColor: oldRedColor,
                             hvColor: basePinkColor,
-                            // onPressed: saveInput,
                             onPressed: () {
                               context
                                   .read<HistoryActionBloc>()

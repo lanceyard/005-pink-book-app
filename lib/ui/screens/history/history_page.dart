@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pink_book_app/logic/bloc/auth/auth_bloc.dart';
 import 'package:pink_book_app/logic/bloc/history_action/history_action_bloc.dart';
 import 'package:pink_book_app/logic/model/save_history.dart';
+import 'package:pink_book_app/ui/screens/history/input_page.dart';
 import 'package:pink_book_app/ui/widget/Dialog/custom_alert_dialog.dart';
 import 'package:pink_book_app/ui/widget/theme/color_theme.dart';
 import 'package:pink_book_app/ui/widget/theme/text_theme.dart';
@@ -99,27 +100,27 @@ class _HistoryPageState extends State<HistoryPage>
   Widget build(BuildContext context) {
     return BlocListener<HistoryActionBloc, HistoryActionState>(
         listener: (context, state) {
-        if(state is HistoryActionSuccess){
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return const CustomAlertDialog(
-                  title: Icons.info_outlined,
-                  content: "History Input Saved!",
-                );
-              });
-        }
+          if (state is HistoryActionSuccess) {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return const CustomAlertDialog(
+                    title: Icons.info_outlined,
+                    content: "History Input Saved!",
+                  );
+                });
+          }
 
-        if(state is HistoryActionError){
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return CustomAlertDialog(
-                  title: Icons.info_outlined,
-                  content: state.msg,
-                );
-              });
-        }
+          if (state is HistoryActionError) {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return CustomAlertDialog(
+                    title: Icons.info_outlined,
+                    content: state.msg,
+                  );
+                });
+          }
         },
         child: Scaffold(
             appBar: AppBar(
@@ -256,8 +257,18 @@ class _HistoryPageState extends State<HistoryPage>
                                             IconButton(
                                               iconSize: 16.0,
                                               onPressed: () {
-                                                Navigator.pushNamed(
-                                                    context, '/input');
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        InputPage(
+                                                      saveHistory: _historyData[
+                                                          index], // Misalkan ini adalah data yang akan diedit
+                                                      isEditing:
+                                                          true, // Tandai bahwa ini adalah sesi editing, bukan membuat baru
+                                                    ),
+                                                  ),
+                                                );
                                               },
                                               icon: Icon(
                                                 Icons.edit,
@@ -325,32 +336,16 @@ class _HistoryPageState extends State<HistoryPage>
                     getHistoryDocuments();
                   },
                 ),
-                // Floating action menu item
-                // Bubble(
-                //   title: "See Results",
-                //   iconColor: Colors.white,
-                //   bubbleColor: basePinkColor,
-                //   icon: Icons.assignment,
-                //   titleStyle: const TextStyle(fontSize: 14, color: Colors.white),
-                //   onPress: () {
-                //     _animationController.reverse();
-                //     Navigator.pushNamed(context, '/result');
-                //   },
-                // ),
               ],
 
-              // animation controller
               animation: _animation,
 
-              // On pressed change animation state
               onPress: () => _animationController.isCompleted
                   ? _animationController.reverse()
                   : _animationController.forward(),
 
-              // Floating Action button Icon color
               iconColor: Colors.white,
 
-              // Flaoting Action button Icon
               iconData: Icons.menu,
               backGroundColor: basePinkColor,
             )));
