@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pink_book_app/logic/bloc/auth/auth_bloc.dart';
+import 'package:pink_book_app/logic/model/save_history.dart';
 import 'package:pink_book_app/ui/widget/theme/color_theme.dart';
 import 'package:pink_book_app/ui/widget/theme/text_theme.dart';
 
@@ -20,6 +22,7 @@ class _HistoryPageState extends State<HistoryPage>
 
   @override
   void initState() {
+    super.initState();
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 260),
@@ -29,99 +32,30 @@ class _HistoryPageState extends State<HistoryPage>
         CurvedAnimation(curve: Curves.easeInOut, parent: _animationController);
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
 
-    super.initState();
+		getHistoryDocuments();
+  }
+
+  getHistoryDocuments() async {
+    try {
+      final currentUid = FirebaseAuth.instance.currentUser!.uid;
+      final collection = FirebaseFirestore.instance.collection('histories');
+      final querySnapshot =
+          await collection.where('uid', isEqualTo: currentUid).get();
+      _historyData.clear();
+      for (var doc in querySnapshot.docs) {
+        final data = doc.data();
+        final SaveHistory sH = SaveHistory.fromMap(data);
+        setState(() {
+          _historyData.add(sH);
+        });
+      }
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   //? Dummy Data
-  final List<Map<String, String>> _historyData = [
-    {
-      'Date': '2024-04-25',
-      'Month': 'April',
-      'Time': '10:00 AM',
-    },
-    {
-      'Date': '2024-04-20',
-      'Month': 'April',
-      'Time': '02:00 PM',
-    },
-    {
-      'Date': '2024-04-20',
-      'Month': 'April',
-      'Time': '02:00 PM',
-    },
-    {
-      'Date': '2024-04-20',
-      'Month': 'April',
-      'Time': '02:00 PM',
-    },
-    {
-      'Date': '2024-04-20',
-      'Month': 'April',
-      'Time': '02:00 PM',
-    },
-    {
-      'Date': '2024-04-20',
-      'Month': 'April',
-      'Time': '02:00 PM',
-    },
-    {
-      'Date': '2024-04-20',
-      'Month': 'April',
-      'Time': '02:00 PM',
-    },
-    {
-      'Date': '2024-04-20',
-      'Month': 'April',
-      'Time': '02:00 PM',
-    },
-    {
-      'Date': '2024-04-20',
-      'Month': 'April',
-      'Time': '02:00 PM',
-    },
-    {
-      'Date': '2024-04-20',
-      'Month': 'April',
-      'Time': '02:00 PM',
-    },
-    {
-      'Date': '2024-04-20',
-      'Month': 'April',
-      'Time': '02:00 PM',
-    },
-    {
-      'Date': '2024-04-25',
-      'Month': 'April',
-      'Time': '10:00 AM',
-    },
-    {
-      'Date': '2024-04-25',
-      'Month': 'April',
-      'Time': '10:00 AM',
-    },
-    {
-      'Date': '2024-04-25',
-      'Month': 'April',
-      'Time': '10:00 AM',
-    },
-    {
-      'Date': '2024-04-25',
-      'Month': 'April',
-      'Time': '10:00 AM',
-    },
-    {
-      'Date': '2024-04-25',
-      'Month': 'April',
-      'Time': '10:00 AM',
-    },
-    {
-      'Date': '2024-04-25',
-      'Month': 'April',
-      'Time': '10:00 AM',
-    },
-  ];
-
-    
+  final List<SaveHistory> _historyData = [];
 
   @override
   Widget build(BuildContext context) {
@@ -190,9 +124,11 @@ class _HistoryPageState extends State<HistoryPage>
                         _historyData.length,
                         (index) => DataRow(
                           cells: [
-                            DataCell(Text(_historyData[index]['Date']!)),
-                            DataCell(Text(_historyData[index]['Month']!)),
-                            DataCell(Text(_historyData[index]['Time']!)),
+                            // put it here
+                            DataCell(Text(_historyData[index].date)),
+                            DataCell(Text(
+                                _historyData[index].pregnancyAge.toString())),
+                            DataCell(Text(_historyData[index].date)),
                             DataCell(
                               Row(
                                 mainAxisSize: MainAxisSize.min,
@@ -262,18 +198,28 @@ class _HistoryPageState extends State<HistoryPage>
                 Navigator.pushNamed(context, '/input');
               },
             ),
-            // Floating action menu item
             Bubble(
-              title: "See Results",
+              title: "See Firebase",
               iconColor: Colors.white,
               bubbleColor: basePinkColor,
-              icon: Icons.assignment,
+              icon: Icons.refresh,
               titleStyle: const TextStyle(fontSize: 14, color: Colors.white),
               onPress: () {
-                _animationController.reverse();
-                Navigator.pushNamed(context, '/result');
+                getHistoryDocuments();
               },
             ),
+            // Floating action menu item
+            // Bubble(
+            //   title: "See Results",
+            //   iconColor: Colors.white,
+            //   bubbleColor: basePinkColor,
+            //   icon: Icons.assignment,
+            //   titleStyle: const TextStyle(fontSize: 14, color: Colors.white),
+            //   onPress: () {
+            //     _animationController.reverse();
+            //     Navigator.pushNamed(context, '/result');
+            //   },
+            // ),
           ],
 
           // animation controller

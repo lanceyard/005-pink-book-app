@@ -19,11 +19,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<UserAuthLoginPassword>((event, emit) async {
       emit(AuthLoading());
       try {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
+        final user =
+            await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: event.email,
           password: event.password,
         );
-        emit(AuthLoaded());
+        emit(AuthLoaded(user));
       } on FirebaseAuthException catch (e) {
         emit(AuthError(e.message!));
       } catch (e) {
@@ -41,8 +42,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           accessToken: gAuth?.accessToken, idToken: gAuth?.idToken);
 
       try {
-        await FirebaseAuth.instance.signInWithCredential(credential);
-        emit(AuthLoaded());
+        final user =
+            await FirebaseAuth.instance.signInWithCredential(credential);
+        emit(AuthLoaded(user));
       } on FirebaseAuthException catch (e) {
         emit(AuthError(e.message!));
       } catch (e) {
@@ -55,11 +57,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<UserAuthRegisterPassword>((event, emit) async {
       emit(AuthLoading());
       try {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        final user = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: event.email,
           password: event.password,
         );
-        emit(AuthLoaded());
+        emit(AuthLoaded(user));
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           emit(AuthError('The password provided is too weak.'));

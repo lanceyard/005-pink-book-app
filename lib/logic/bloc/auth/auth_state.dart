@@ -7,7 +7,10 @@ class AuthInitial extends AuthState {}
 
 class AuthLoading extends AuthState {}
 
-class AuthLoaded extends AuthState {}
+class AuthLoaded extends AuthState {
+  UserCredential cred;
+  AuthLoaded(this.cred);
+}
 
 class AuthError extends AuthState {
   String error;

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pink_book_app/logic/bloc/auth/auth_bloc.dart';
+import 'package:pink_book_app/logic/bloc/history/history_bloc.dart';
 import 'package:pink_book_app/ui/screens/auth/login_page.dart';
 import 'package:pink_book_app/ui/screens/history/history_page.dart';
 import 'package:pink_book_app/ui/widget/Dialog/custom_alert_dialog.dart';
@@ -42,7 +43,10 @@ class _AuthPageState extends State<AuthPage> {
               if (snapshot.data == null) {
                 return const LoginPage();
               } else {
-                return const HistoryPage();
+                return BlocProvider(
+                  create: (context) => HistoryBloc(),
+                  child: const HistoryPage(),
+                );
               }
             }
             return const Center(

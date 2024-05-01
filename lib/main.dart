@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pink_book_app/logic/bloc/auth/auth_bloc.dart';
+import 'package:pink_book_app/logic/bloc/history/history_bloc.dart';
 import 'package:pink_book_app/ui/screens/auth/auth_page.dart';
 import 'package:pink_book_app/ui/screens/auth/login_page.dart';
 import 'package:pink_book_app/ui/screens/auth/register_page.dart';
@@ -27,11 +28,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-  // [[ Provide auth bloc. kalo dianalogiin; widget tree kan dari atas turun ke bawah,
-  // misal ini material app, isinya ada scaffold, lalu scaffold isinya page ini itu 
-  // nah providing bloc itu kaya nuangin aer. auth bloc ditaroh sini biar bisa kena semua ]]
-    return BlocProvider(
-      create: (_) => AuthBloc(),
+    // [[ Provide auth bloc. kalo dianalogiin; widget tree kan dari atas turun ke bawah,
+    // misal ini material app, isinya ada scaffold, lalu scaffold isinya page ini itu
+    // nah providing bloc itu kaya nuangin aer. auth bloc ditaroh sini biar bisa kena semua ]]
+    return MultiBlocProvider(
+      providers: [
+      BlocProvider(
+        create: (context) => AuthBloc()),
+      BlocProvider(
+        create: (context) => HistoryBloc())
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,

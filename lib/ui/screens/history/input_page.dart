@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:pink_book_app/ui/screens/history/save_input.dart';
+import 'package:pink_book_app/logic/bloc/history/history_bloc.dart';
+import 'package:pink_book_app/logic/model/save_history.dart';
 import 'package:pink_book_app/ui/widget/Dialog/custom_alert_dialog.dart';
 import 'package:pink_book_app/ui/widget/button/filled_button.dart';
 import 'package:pink_book_app/ui/widget/field/dropdown.dart';
@@ -54,6 +56,7 @@ class _InputPageState extends State<InputPage> {
     }
     setState(() {});
   }
+
 //! buat menghapus image yang sudah dipilih
   void removeImage(int index) {
     imageFileList.removeAt(index);
@@ -66,44 +69,21 @@ class _InputPageState extends State<InputPage> {
 //* skrng cuma ku print ngga di tampilin di class save_input
   String? _selectedAlcoholTest;
   String? _selectedPregnancyAge;
-  void saveInput() {
-    if (_formKey.currentState!.validate()) {
-      // Simpan semua data input ke dalam objek InputHistory
-      SaveHistory saveHistory = SaveHistory(
-        ogttTest: int.parse(ogttController.text),
-        oximeterTest: int.parse(oximeterController.text),
-        stomachDiameter: int.parse(stomachController.text),
-        weightGain: int.parse(weightController.text),
-        momsAge: int.parse(momsageController.text),
-        alcoholTest: _selectedAlcoholTest ??
-            '', 
-        pregnancyAge: int.parse(_selectedPregnancyAge ??
-            '0'),
-        imagePaths: imageFileList.map((image) => image.path).toList(),
-        additionalNotes: notesController.text,
-      );
 
-      // Cetak data input untuk verifikasi
-      printInputHistory(saveHistory);
-
-      // Tambahkan logika penyimpanan ke database atau penyimpanan lainnya
-
-      // Redirect ke halaman hasil
-      // Navigator.pushReplacementNamed(context, '/result');
-    }
-  }
-
-  void printInputHistory(SaveHistory saveHistory) {
-    print('OGTT Test: ${saveHistory.ogttTest}');
-    print('Oximeter Test: ${saveHistory.oximeterTest}');
-    print('Stomach Diameter: ${saveHistory.stomachDiameter}');
-    print('Weight Gain: ${saveHistory.weightGain}');
-    print('Mom\'s Age: ${saveHistory.momsAge}');
-    print('Alcohol Test: ${saveHistory.alcoholTest}');
-    print('Pregnancy Age: ${saveHistory.pregnancyAge}');
-    print('Image Paths:');
-    saveHistory.imagePaths.forEach((path) => print(path));
-    print('Additional Notes: ${saveHistory.additionalNotes}');
+  SaveHistory saveInput() {
+    // Simpan semua data input ke dalam objek InputHistory
+    SaveHistory saveHistory = SaveHistory(
+      ogttTest: int.parse(ogttController.text),
+      oximeterTest: int.parse(oximeterController.text),
+      stomachDiameter: int.parse(stomachController.text),
+      weightGain: int.parse(weightController.text),
+      momsAge: int.parse(momsageController.text),
+      alcoholTest: _selectedAlcoholTest ?? '',
+      pregnancyAge: int.parse(_selectedPregnancyAge ?? '0'),
+      imagePaths: imageFileList.map((image) => image.path).toList(),
+      additionalNotes: notesController.text,
+    );
+    return saveHistory;
   }
 
   @override
@@ -494,12 +474,12 @@ class _InputPageState extends State<InputPage> {
                         height: 48,
                         bgColor: oldRedColor,
                         hvColor: basePinkColor,
-                        onPressed: saveInput,
-                        // onPressed: () {
-                        //   if (_formKey.currentState!.validate()) {
-                        //     Navigator.pushReplacementNamed(context, '/result');
-                        //   }
-                        // },
+                        // onPressed: saveInput,
+                        onPressed: () {
+                          context
+                              .read<HistoryBloc>()
+                              .add(HistorySaveEvent(saveInput()));
+                        },
                       )
                     ],
                   ),
@@ -512,4 +492,3 @@ class _InputPageState extends State<InputPage> {
     );
   }
 }
-
