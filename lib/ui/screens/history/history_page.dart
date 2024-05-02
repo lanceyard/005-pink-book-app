@@ -8,6 +8,7 @@ import 'package:pink_book_app/logic/bloc/history_action/history_action_bloc.dart
 import 'package:pink_book_app/logic/model/save_history.dart';
 import 'package:pink_book_app/ui/screens/history/input_page.dart';
 import 'package:pink_book_app/ui/screens/result/result_page.dart';
+import 'package:pink_book_app/ui/utils.dart';
 import 'package:pink_book_app/ui/widget/Dialog/custom_alert_dialog.dart';
 import 'package:pink_book_app/ui/widget/theme/color_theme.dart';
 import 'package:pink_book_app/ui/widget/theme/text_theme.dart';
@@ -160,9 +161,10 @@ class _HistoryPageState extends State<HistoryPage>
                                     label: const Text('Date'),
                                     onSort: (columnIndex, ascending) =>
                                         _sort<String>(
-                                            (SaveHistory sh) => sh.date,
+                                            (SaveHistory sh) => extractDatetime(
+                                                sh.date, "time"),
                                             columnIndex,
-                                            ascending),
+                                            false),
                                   ),
                                   DataColumn(
                                     label: const Text('Month'),
@@ -177,7 +179,8 @@ class _HistoryPageState extends State<HistoryPage>
                                     label: const Text('Time'),
                                     onSort: (columnIndex, ascending) =>
                                         _sort<String>(
-                                            (SaveHistory sh) => sh.date,
+                                            (SaveHistory sh) => extractDatetime(
+                                                sh.date, "time"),
                                             columnIndex,
                                             ascending),
                                   ),
@@ -188,11 +191,11 @@ class _HistoryPageState extends State<HistoryPage>
                                   (index) => DataRow(
                                     cells: [
                                       // put it here
-                                      DataCell(Text(_historyData[index].date)),
+                                      DataCell(Text(extractDatetime(_historyData[index].date, "date"))),
                                       DataCell(Text(_historyData[index]
                                           .pregnancyAge
                                           .toString())),
-                                      DataCell(Text(_historyData[index].date)),
+                                      DataCell(Text(extractDatetime(_historyData[index].date, "time"))),
                                       DataCell(
                                         Row(
                                           mainAxisSize: MainAxisSize.min,
