@@ -79,7 +79,7 @@ class _HistoryPageState extends State<HistoryPage>
           ],
           backgroundColor: shadePinkColor,
           title: Text(
-            'HI ${FirebaseAuth.instance.currentUser?.displayName ?? "User"}!',
+            'HI ${FirebaseAuth.instance.currentUser?.displayName != '' ? FirebaseAuth.instance.currentUser?.displayName : "User"}!',
             style: titleTextStyle.copyWith(
               fontSize: 24,
             ),
@@ -189,11 +189,13 @@ class _HistoryPageState extends State<HistoryPage>
                                   (index) => DataRow(
                                     cells: [
                                       // put it here
-                                      DataCell(Text(extractDatetime(_historyData[index].date, "date"))),
+                                      DataCell(Text(extractDatetime(
+                                          _historyData[index].date, "date"))),
                                       DataCell(Text(_historyData[index]
                                           .pregnancyAge
                                           .toString())),
-                                      DataCell(Text(extractDatetime(_historyData[index].date, "time"))),
+                                      DataCell(Text(extractDatetime(
+                                          _historyData[index].date, "time"))),
                                       DataCell(
                                         Row(
                                           mainAxisSize: MainAxisSize.min,

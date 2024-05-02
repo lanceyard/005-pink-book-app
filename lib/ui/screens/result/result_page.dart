@@ -48,7 +48,7 @@ class _ResultPageState extends State<ResultPage> {
       isAlcoholNormal = true;
     } else if (widget.saveHistory.alcoholTest == 'Positive') {
       addSuggestion(
-          'We suggest you to Reduce Alcohol Consumption since alcohol is bad for infant and can lead to bigger problem !',
+          'We suggest you to reduce Alcohol Consumption since alcohol is bad for infant and can lead to bigger problem!',
           false);
     }
 
@@ -120,7 +120,7 @@ class _ResultPageState extends State<ResultPage> {
                 children: [
                   Center(
                     child: Text(
-                      'DATA REESULT',
+                      'DATA RESULT',
                       style: titleTextStyle.copyWith(fontSize: 20),
                     ),
                   ),
@@ -243,7 +243,9 @@ class _ResultPageState extends State<ResultPage> {
                   ),
                   //! output notes belum tau bakal gimana manggilnya jadi make text dummy dulu
                   Text(
-                    'No additional notes in here',
+                    widget.saveHistory.additionalNotes != ""
+                        ? widget.saveHistory.additionalNotes
+                        : 'No additional notes in here',
                     style: subHeaderTextStyle.copyWith(
                       fontSize: 14,
                     ),
