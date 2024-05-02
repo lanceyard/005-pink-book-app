@@ -7,6 +7,7 @@ import 'package:pink_book_app/logic/bloc/history/history_bloc.dart';
 import 'package:pink_book_app/logic/bloc/history_action/history_action_bloc.dart';
 import 'package:pink_book_app/logic/model/save_history.dart';
 import 'package:pink_book_app/ui/screens/history/input_page.dart';
+import 'package:pink_book_app/ui/screens/result/result_page.dart';
 import 'package:pink_book_app/ui/widget/Dialog/custom_alert_dialog.dart';
 import 'package:pink_book_app/ui/widget/theme/color_theme.dart';
 import 'package:pink_book_app/ui/widget/theme/text_theme.dart';
@@ -198,9 +199,23 @@ class _HistoryPageState extends State<HistoryPage>
                                           children: [
                                             IconButton(
                                               iconSize: 16.0,
-                                              onPressed: () {
-                                                Navigator.pushNamed(
-                                                    context, '/result');
+                                              onPressed: () async {
+                                                context
+                                                    .read<HistoryActionBloc>()
+                                                    .add(
+                                                        HistoryActionDetailEvent(
+                                                            _historyData[index]
+                                                                .id));
+                                                await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ResultPage(
+                                                      saveHistory: _historyData[
+                                                          index], // Misalkan ini adalah data yang akan diedit
+                                                    ),
+                                                  ),
+                                                );
                                               },
                                               icon: Icon(
                                                 Icons.assignment,

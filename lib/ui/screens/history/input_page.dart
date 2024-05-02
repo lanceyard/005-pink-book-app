@@ -53,7 +53,6 @@ class _InputPageState extends State<InputPage> {
           widget.saveHistory!.imagePaths.map((path) => XFile(path)).toList();
       notesController.text = widget.saveHistory!.additionalNotes.toString();
     }
-    print(widget.saveHistory?.id);
   }
 
 //! Logic buat pengambilan image dari local

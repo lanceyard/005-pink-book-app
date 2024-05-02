@@ -114,6 +114,19 @@ class HistoryActionBloc extends Bloc<HistoryActionEvent, HistoryActionState> {
       }
     });
 
-    on<HistoryActionDetailEvent>((event, emit) async {});
+    on<HistoryActionDetailEvent>((event, emit) async {
+      emit(HistoryActionLoading());
+      final collection = FirebaseFirestore.instance.collection('histories');
+      final docRef = collection.doc(event.id);
+      try {
+        await docRef.get().then((DocumentSnapshot doc) {
+          final data = doc.data() as Map<String, dynamic>;
+          final convertedData = SaveHistory.fromMap(data);
+          emit(HistoryActionLoaded(convertedData));
+        }, onError: (e) => emit(HistoryActionError(e.toString())));
+      } catch (e) {
+        emit(HistoryActionError(e.toString()));
+      }
+    });
   }
 }

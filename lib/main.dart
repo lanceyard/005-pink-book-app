@@ -51,7 +51,6 @@ class MyApp extends StatelessWidget {
           '/register': (context) => const RegisterPage(),
           '/history': (context) => const HistoryPage(),
           '/input': (context) => const InputPage(),
-          '/result': (context) => const ResultPage(),
         },
       ),
     );

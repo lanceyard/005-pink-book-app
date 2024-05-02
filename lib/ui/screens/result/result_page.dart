@@ -1,91 +1,96 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:pink_book_app/logic/model/save_history.dart';
+import 'package:pink_book_app/ui/utils.dart';
 import 'package:pink_book_app/ui/widget/theme/color_theme.dart';
 import 'package:pink_book_app/ui/widget/theme/text_theme.dart';
 
-class ResultPage extends StatelessWidget {
-  const ResultPage({super.key});
+class ResultPage extends StatefulWidget {
+  final SaveHistory saveHistory;
+  const ResultPage({super.key, required this.saveHistory});
 
-//? Dummy Data
   @override
-  Widget build(BuildContext context) {
-    final List<Map<String, dynamic>> resultData = [
-      {
-        'Test': 'OGTT',
-        'Data': 180,
-      },
-      {
-        'Test': 'Alcohol',
-        'Data': 'Positive',
-      },
-      {
-        'Test': 'Weight',
-        'Data': 50,
-      },
-      {
-        'Test': 'Oximeter',
-        'Data': 95,
-      },
-    ];
+  State<ResultPage> createState() => _ResultPageState();
+}
 
+class _ResultPageState extends State<ResultPage> {
+  List<String> suggestions = [];
+  List<XFile> imageFileList = [];
+  int normalTests = 0;
+  double normalPercentage = 0;
 
-    List<String> suggestions = [];
-    List<String> imageList = [];
+  bool isOgttNormal = false;
+  bool isAlcoholNormal = false;
+  bool isOximeterNormal = false;
+  bool isWeightNormal = false;
 
-    int normalTests = 0;
-
-    // Logic for checking test results and generating suggestions
-    for (int i = 0; i < resultData.length; i++) {
-      final testName = resultData[i]['Test'];
-      final testData = resultData[i]['Data'];
-      bool isNormal = false;
-
-      if (!isNormal) {
-        if (testName == 'OGTT') {
-          if (testData! >= 140 && testData <= 190) {
-            isNormal = true;
-            suggestions.add('Your Blood Test is Normal !');
-          } else if (testData > 190) {
-            suggestions.add(
-                'We suggest you to eat healthy food and try to reduce sugar consumption to make sure your infant is healthy!');
-          } else {
-            suggestions.add(
-                'We suggest you to eat some high sugar food to make sure your blood is normal, it will affect your infant health!');
-          }
-        } else if (testName == 'Alcohol' && testData == 'Negative') {
-          isNormal = true;
-        } else if (testName == 'Alcohol' && testData == 'Positive') {
-          suggestions.add(
-              'We Sugest you to Reduce Alcohol Consumption since alcohol is bad for infant and can lead to bigger problem !');
-        } else if (testName == 'Oximeter') {
-          if (testData! >= 95 && testData <= 100) {
-            isNormal = true;
-            suggestions.add('Your Oximeter Test is Normal !');
-          } else {
-            suggestions.add(
-                'We suggest you to avoid some smokes including vape or cigarettes it will cause your infant unhealthy.');
-          }
-          //! Ini weight nya kenapa sampe 25 ?
-        } else if (testName == 'Weight') {
-          if (testData! >= 18 && testData <= 25) {
-            isNormal = true;
-            suggestions.add('Your Weight is Normal !');
-          } else if (testData < 18) {
-            suggestions.add(
-                'We suggest you to eat more food to gain some weight it will affect your infant health.');
-          } else {
-            suggestions.add(
-                'We suggest you to reduce your weight with some safe healthy diet for pregnant women, because it will affect your infant health.');
-          }
-        }
-      }
-      if (isNormal) {
-        normalTests++;
-      }
+  @override
+  void initState() {
+    super.initState();
+    imageFileList =
+        widget.saveHistory.imagePaths.map((path) => XFile(path)).toList();
+    if (widget.saveHistory.ogttTest >= 140 &&
+        widget.saveHistory.ogttTest <= 190) {
+      isOgttNormal = true;
+      addSuggestion('Your Blood Test is Normal !', true);
+    } else if (widget.saveHistory.ogttTest > 190) {
+      addSuggestion(
+          'We suggest you to eat healthy food and try to reduce sugar consumption to make sure your infant is healthy!',
+          false);
+    } else {
+      addSuggestion(
+          'We suggest you to eat some high sugar food to make sure your blood is normal, it will affect your infant health!',
+          false);
     }
 
-//! Ini untuk mengetahui berapa percent retardnya:v
-    double normalPercentage = (normalTests / resultData.length) * 100;
+    if (widget.saveHistory.alcoholTest == 'Negative') {
+      isAlcoholNormal = true;
+    } else if (widget.saveHistory.alcoholTest == 'Positive') {
+      addSuggestion(
+          'We suggest you to Reduce Alcohol Consumption since alcohol is bad for infant and can lead to bigger problem !',
+          false);
+    }
 
+    if (widget.saveHistory.oximeterTest >= 95 &&
+        widget.saveHistory.oximeterTest <= 100) {
+      isOximeterNormal = true;
+      addSuggestion('Your Oximeter Test is Normal!', true);
+    } else {
+      addSuggestion(
+          'We suggest you to avoid some smokes including vape or cigarettes it will cause your infant unhealthy.',
+          false);
+    }
+
+    if (widget.saveHistory.weightGain >= 18 &&
+        widget.saveHistory.weightGain <= 25) {
+      isWeightNormal = true;
+      addSuggestion('Your Weight is Normal!', true);
+    } else if (widget.saveHistory.weightGain < 18) {
+      addSuggestion(
+          'We suggest you to eat more food to gain some weight it will affect your infant health.',
+          false);
+    } else {
+      addSuggestion(
+          'We suggest you to reduce your weight with some safe healthy diet for pregnant women, because it will affect your infant health.',
+          false);
+    }
+
+    normalTests = (isOgttNormal ? 1 : 0) +
+        (isAlcoholNormal ? 1 : 0) +
+        (isOximeterNormal ? 1 : 0) +
+        (isWeightNormal ? 1 : 0);
+
+    normalPercentage = (normalTests / 4) * 100;
+  }
+
+  void addSuggestion(String suggestion, bool isNormal) {
+    setState(() {
+      suggestions.add('$suggestion#${isNormal ? 'normal' : 'abnormal'}');
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
@@ -132,60 +137,78 @@ class ResultPage extends StatelessWidget {
                     height: 16,
                   ),
                   Center(
-                    child: DataTable(
-                      columns: const [
-                        DataColumn(label: Text('Test')),
-                        DataColumn(label: Text('Data')),
-                        DataColumn(label: Text('Result')),
+                      child: DataTable(columns: const [
+                    DataColumn(label: Text('Test')),
+                    DataColumn(label: Text('Data')),
+                    DataColumn(label: Text('Result')),
+                  ], rows: [
+                    DataRow(
+                      cells: [
+                        const DataCell(Text("OGTT")),
+                        DataCell(Text(widget.saveHistory.ogttTest.toString())),
+                        DataCell(
+                          Icon(
+                            isOgttNormal ? Icons.check_circle : Icons.cancel,
+                            color: isOgttNormal ? Colors.green : Colors.red,
+                          ),
+                        ),
                       ],
-                      rows: List.generate(
-                        resultData.length,
-                        (index) {
-                          //! ini logic buat iconya
-                          final testName = resultData[index]['Test'];
-                          final testData = resultData[index]['Data'];
-                          bool isNormal = false;
-
-                          if (testName == 'OGTT') {
-                            isNormal = testData! >= 140 && testData <= 190;
-                          } else if (testName == 'Alcohol') {
-                            isNormal = testData == 'Negative';
-                          } else if (testName == 'Oximeter') {
-                            isNormal = testData! >= 95 && testData <= 100;
-                          } else if (testName == 'Weight') {
-                            isNormal = testData! >= 18 && testData <= 25;
-                          }
-
-                          return DataRow(
-                            cells: [
-                              DataCell(Text(resultData[index]['Test']!)),
-                              DataCell(
-                                  Text(resultData[index]['Data'].toString())),
-                              DataCell(
-                                Icon(
-                                  isNormal ? Icons.check_circle : Icons.cancel,
-                                  color: isNormal ? Colors.green : Colors.red,
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
                     ),
-                  ),
+                    DataRow(
+                      cells: [
+                        const DataCell(Text("Alcohol")),
+                        DataCell(Text(widget.saveHistory.alcoholTest)),
+                        DataCell(
+                          Icon(
+                            isAlcoholNormal ? Icons.check_circle : Icons.cancel,
+                            color: isAlcoholNormal ? Colors.green : Colors.red,
+                          ),
+                        ),
+                      ],
+                    ),
+                    DataRow(
+                      cells: [
+                        const DataCell(Text("Weight")),
+                        DataCell(
+                            Text(widget.saveHistory.weightGain.toString())),
+                        DataCell(
+                          Icon(
+                            isWeightNormal ? Icons.check_circle : Icons.cancel,
+                            color: isWeightNormal ? Colors.green : Colors.red,
+                          ),
+                        ),
+                      ],
+                    ),
+                    DataRow(
+                      cells: [
+                        const DataCell(Text("Oximeter")),
+                        DataCell(
+                            Text(widget.saveHistory.oximeterTest.toString())),
+                        DataCell(
+                          Icon(
+                            isOximeterNormal
+                                ? Icons.check_circle
+                                : Icons.cancel,
+                            color: isOximeterNormal ? Colors.green : Colors.red,
+                          ),
+                        ),
+                      ],
+                    )
+                  ])),
                   const SizedBox(height: 16),
-                  //! Ini output sugestion 
-                  //! TO Do 
+                  //! Ini output sugestion
+                  //! TO Do
                   //? Warnanya retard merah merah semua hijau hijau semua bad my logic
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: suggestions.map((suggestion) {
+                      final splitted = suggestion.split("#");
+                      final suggestionText = splitted[0];
+                      final isNormal = splitted[1] == 'normal';
                       return Text(
-                        suggestion,
+                        suggestionText,
                         style: TextStyle(
-                          color: suggestions.isNotEmpty
-                              ? Colors.red
-                              : Colors.green,
+                          color: isNormal ? Colors.green : Colors.red,
                           fontSize: 14,
                         ),
                       );
@@ -219,7 +242,7 @@ class ResultPage extends StatelessWidget {
                   ),
                   //! output notes belum tau bakal gimana manggilnya jadi make text dummy dulu
                   Text(
-                    'Nothing Notes in here',
+                    'No additional notes in here',
                     style: subHeaderTextStyle.copyWith(
                       fontSize: 14,
                     ),
@@ -234,15 +257,20 @@ class ResultPage extends StatelessWidget {
                     ),
                   ),
                   //! ini sama udah ku siapin make image.network kalo manggil dari api
-                  imageList.isEmpty
-                      ? const Text('No Images here')
+                  imageFileList.isEmpty
+                      ? const Text('No image attached here')
                       : GridView.builder(
+                          shrinkWrap: true,
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
+                                  mainAxisSpacing: 6,
+                                  crossAxisSpacing: 6,
                                   crossAxisCount: 3),
+                          itemCount: imageFileList.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return Image.network('');
-                          })
+                            return showImage(imageFileList[index].path);
+                          },
+                        )
                 ],
               ),
             ),
