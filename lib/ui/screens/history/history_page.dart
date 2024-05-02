@@ -79,7 +79,7 @@ class _HistoryPageState extends State<HistoryPage>
           ],
           backgroundColor: shadePinkColor,
           title: Text(
-            'HI ${FirebaseAuth.instance.currentUser?.displayName != '' ? FirebaseAuth.instance.currentUser?.displayName : "User"}!',
+            'HI ${FirebaseAuth.instance.currentUser?.displayName != '' && FirebaseAuth.instance.currentUser?.displayName != null ? FirebaseAuth.instance.currentUser?.displayName : "User"}!',
             style: titleTextStyle.copyWith(
               fontSize: 24,
             ),
