@@ -116,9 +116,6 @@ class _HistoryPageState extends State<HistoryPage>
                     const SizedBox(
                       height: 16,
                     ),
-                    const SizedBox(
-                      height: 16,
-                    ),
                     BlocConsumer<HistoryBloc, HistoryState>(
                         listener: (context, state) {
                       if (state is HistoryInitial) {
