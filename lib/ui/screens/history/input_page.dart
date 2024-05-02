@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pink_book_app/logic/bloc/history/history_bloc.dart';
@@ -22,17 +23,13 @@ class InputPage extends StatefulWidget {
 }
 
 class _InputPageState extends State<InputPage> {
+  final _formKey = GlobalKey<FormState>();
   final ogttController = TextEditingController();
   final oximeterController = TextEditingController();
   final stomachController = TextEditingController();
   final weightController = TextEditingController();
   final momsageController = TextEditingController();
   final notesController = TextEditingController();
-
-  final _formKey = GlobalKey<FormState>();
-
-  final numberRegExp = RegExp(r'^[0-9]+$');
-
   final ImagePicker imagePicker = ImagePicker();
 
   List<XFile> imageFileList = [];
@@ -161,12 +158,15 @@ class _InputPageState extends State<InputPage> {
                         controller: ogttController,
                         isLoading: isLoading,
                         keyType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
                         validator: (val) {
                           if (val == null || val.isEmpty) {
                             return 'The OGTT Test field must be filled in';
                           }
-                          if (!numberRegExp.hasMatch(val)) {
-                            return 'Only numbers are allowed for OGTT Test';
+                          if (int.parse(val) < 100 || int.parse(val) > 200) {
+                            return 'Please enter a number between 100 and 200';
                           }
                           return null;
                         },
@@ -201,12 +201,15 @@ class _InputPageState extends State<InputPage> {
                         controller: oximeterController,
                         isLoading: isLoading,
                         keyType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
                         validator: (val) {
                           if (val == null || val.isEmpty) {
                             return 'The Oximeter Test field must be filled in';
                           }
-                          if (!numberRegExp.hasMatch(val)) {
-                            return 'Only numbers are allowed for Oximeter Test';
+                          if (int.parse(val) < 1 || int.parse(val) > 100) {
+                            return 'Please enter a number between 1 and 100';
                           }
                           return null;
                         },
@@ -225,12 +228,12 @@ class _InputPageState extends State<InputPage> {
                         controller: stomachController,
                         isLoading: isLoading,
                         keyType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
                         validator: (val) {
                           if (val == null || val.isEmpty) {
                             return 'The Stomach Diameter field must be filled in';
-                          }
-                          if (!numberRegExp.hasMatch(val)) {
-                            return 'Only numbers are allowed for Stomach Diameter';
                           }
                           return null;
                         },
@@ -249,12 +252,15 @@ class _InputPageState extends State<InputPage> {
                         controller: weightController,
                         isLoading: isLoading,
                         keyType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
                         validator: (val) {
                           if (val == null || val.isEmpty) {
                             return 'The Weight Gain field must be filled in';
                           }
-                          if (!numberRegExp.hasMatch(val)) {
-                            return 'Only numbers are allowed for Weight Gain';
+                          if (int.parse(val) < 9 || int.parse(val) > 50) {
+                            return 'Please enter a number between 1 and 100';
                           }
                           return null;
                         },
@@ -273,12 +279,12 @@ class _InputPageState extends State<InputPage> {
                         controller: momsageController,
                         isLoading: isLoading,
                         keyType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
                         validator: (val) {
                           if (val == null || val.isEmpty) {
                             return 'The Moms Age field must be filled in';
-                          }
-                          if (!numberRegExp.hasMatch(val)) {
-                            return 'Only numbers are allowed for Moms Age';
                           }
                           return null;
                         },
@@ -334,7 +340,7 @@ class _InputPageState extends State<InputPage> {
                         height: 10,
                       ),
                       Text(
-                        'Pregnancy Age',
+                        'Pregnancy Age (Month)',
                         style: subHeaderTextStyle.copyWith(fontSize: 16),
                       ),
                       const SizedBox(
@@ -545,19 +551,20 @@ class _InputPageState extends State<InputPage> {
                             bgColor: oldRedColor,
                             hvColor: basePinkColor,
                             onPressed: () {
-                              if (widget.isEditing) {
-                                context.read<HistoryActionBloc>().add(
-                                    HistoryActionUpdateDetailEvent(
-                                        widget.saveHistory!.id, saveInput()));
-                              } else {
+                              if (_formKey.currentState!.validate()) {
+                                if (widget.isEditing) {
+                                  context.read<HistoryActionBloc>().add(
+                                      HistoryActionUpdateDetailEvent(
+                                          widget.saveHistory!.id, saveInput()));
+                                } else {
+                                  context
+                                      .read<HistoryActionBloc>()
+                                      .add(HistoryActionAddEvent(saveInput()));
+                                }
                                 context
-                                    .read<HistoryActionBloc>()
-                                    .add(HistoryActionAddEvent(saveInput()));
+                                    .read<HistoryBloc>()
+                                    .add(HistoryGetAllEvent());
                               }
-
-                              context
-                                  .read<HistoryBloc>()
-                                  .add(HistoryGetAllEvent());
                             },
                           );
                         },

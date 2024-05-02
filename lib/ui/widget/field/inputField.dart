@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pink_book_app/ui/widget/theme/color_theme.dart';
 import 'package:pink_book_app/ui/widget/theme/text_theme.dart';
 
@@ -12,7 +13,8 @@ class DataInputFIeld extends StatefulWidget {
       this.maxLenght,
       this.isPassword,
       this.validator,
-      this.controller});
+      this.controller,
+      this.inputFormatters});
 
   final bool isLoading;
   final String? hint;
@@ -22,6 +24,7 @@ class DataInputFIeld extends StatefulWidget {
   final bool? isPassword;
   final String? Function(String?)? validator;
   final TextEditingController? controller;
+  final List<TextInputFormatter>? inputFormatters;
 
   @override
   State<DataInputFIeld> createState() => _InputFieldState();
@@ -35,6 +38,7 @@ class _InputFieldState extends State<DataInputFIeld> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      inputFormatters: widget.inputFormatters,
       controller: widget.controller,
       validator: widget.validator,
       obscuringCharacter: '*',
