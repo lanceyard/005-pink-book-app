@@ -260,7 +260,7 @@ class _InputPageState extends State<InputPage> {
                             return 'The Weight Gain field must be filled in';
                           }
                           if (int.parse(val) < 9 || int.parse(val) > 50) {
-                            return 'Please enter a number between 1 and 100';
+                            return 'Please enter a number between 9 and 50';
                           }
                           return null;
                         },
