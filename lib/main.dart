@@ -10,13 +10,13 @@ import 'package:pink_book_app/ui/screens/auth/login_page.dart';
 import 'package:pink_book_app/ui/screens/auth/register_page.dart';
 import 'package:pink_book_app/ui/screens/history/history_page.dart';
 import 'package:pink_book_app/ui/screens/history/input_page.dart';
-import 'package:pink_book_app/ui/screens/result/result_page.dart';
 import 'package:pink_book_app/ui/widget/theme/theme.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  // Ini adalah kode yang memastikan bahwa semua komponen yang diperlukan oleh Flutter telah diinisialisasi sebelum menjalankan aplikasi. Lalu inisialisasi firebase dengan options default untuk platform ini.
 
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -34,12 +34,9 @@ class MyApp extends StatelessWidget {
     // nah providing bloc itu kaya nuangin aer. auth bloc ditaroh sini biar bisa kena semua ]]
     return MultiBlocProvider(
       providers: [
-      BlocProvider(
-        create: (context) => AuthBloc()),
-      BlocProvider(
-        create: (context) => HistoryBloc()),
-      BlocProvider(
-        create: (context) => HistoryActionBloc()),
+        BlocProvider(create: (context) => AuthBloc()),
+        BlocProvider(create: (context) => HistoryBloc()),
+        BlocProvider(create: (context) => HistoryActionBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

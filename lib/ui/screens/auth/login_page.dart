@@ -8,6 +8,7 @@ import 'package:pink_book_app/ui/widget/field/field.dart';
 import 'package:pink_book_app/ui/widget/theme/color_theme.dart';
 import 'package:pink_book_app/ui/widget/theme/text_theme.dart';
 
+// Ini adalah kode untuk halaman login dalam aplikasi. Halaman ini memungkinkan pengguna untuk masuk menggunakan email dan kata sandi, atau menggunakan akun Google. Desainnya modern dengan fitur validasi input dan indikator loading untuk memberi respons saat pengguna melakukan tindakan. Selain itu, terdapat tombol untuk menuju halaman pendaftaran jika pengguna belum memiliki akun.
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 

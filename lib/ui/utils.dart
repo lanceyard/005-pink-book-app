@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+// Fungsi yang diberikan, showImage dan extractDatetime, bertujuan untuk menyederhanakan tampilan gambar dan ekstraksi informasi waktu dalam aplikasi Flutter. Fungsi showImage memungkinkan tampilan gambar dari file lokal atau URL jaringan, sementara fungsi extractDatetime memungkinkan ekstraksi informasi tanggal atau waktu dari string yang diberikan, berdasarkan pilihan pengguna. Fungsi-fungsi ini meningkatkan pengalaman pengguna dengan memfasilitasi tampilan gambar dan pengelolaan informasi terkait waktu secara efektif.
+
 showImage(String path) {
   if (!path.contains("http")) {
     return Image.file(

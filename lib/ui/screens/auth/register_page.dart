@@ -7,6 +7,7 @@ import 'package:pink_book_app/ui/widget/field/field.dart';
 import 'package:pink_book_app/ui/widget/theme/color_theme.dart';
 import 'package:pink_book_app/ui/widget/theme/text_theme.dart';
 
+// Ini adalah kode untuk halaman pendaftaran dalam aplikasi. Pengguna dapat mengisi formulir dengan email, kata sandi, dan konfirmasi kata sandi untuk membuat akun baru. Validasi dilakukan untuk memastikan bahwa email valid dan kata sandi minimal 8 karakter. Selain itu, terdapat tombol untuk masuk ke halaman login jika pengguna sudah memiliki akun.
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 

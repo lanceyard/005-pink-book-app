@@ -5,6 +5,7 @@ import 'package:pink_book_app/ui/utils.dart';
 import 'package:pink_book_app/ui/widget/theme/color_theme.dart';
 import 'package:pink_book_app/ui/widget/theme/text_theme.dart';
 
+// class ResultPage adalah halaman yang menampilkan hasil dari data yang dimasukkan pengguna sebelumnya. Informasi yang ditampilkan meliputi hasil dari tes OGTT, tes alkohol, penambahan berat badan, dan tes oksimeter. Selain itu, halaman ini juga menampilkan saran berdasarkan hasil tes dan persentase deteksi.
 class ResultPage extends StatefulWidget {
   final SaveHistory saveHistory;
   const ResultPage({super.key, required this.saveHistory});

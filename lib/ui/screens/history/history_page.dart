@@ -13,9 +13,7 @@ import 'package:pink_book_app/ui/widget/Dialog/custom_alert_dialog.dart';
 import 'package:pink_book_app/ui/widget/theme/color_theme.dart';
 import 'package:pink_book_app/ui/widget/theme/text_theme.dart';
 
-//! TO DO
-//* Tinggal buton edit sama delete
-
+// Kode ini adalah halaman riwayat dalam aplikasi, di mana pengguna dapat melihat riwayat data yang telah mereka rekam sebelumnya. Halaman ini menampilkan daftar data dalam bentuk tabel yang dapat diurutkan berdasarkan tanggal, bulan, atau waktu. Pengguna juga dapat melakukan berbagai tindakan seperti melihat detail, mengedit, atau menghapus data. Selain itu, terdapat beberapa tombol aksi seperti tombol refresh dan tombol logout di bilah aplikasi, serta tombol floating action untuk menampilkan menu aksi tambahan seperti informasi aplikasi dan menambahkan data baru.
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
 

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,6 +11,7 @@ import 'package:pink_book_app/ui/widget/field/inputField.dart';
 import 'package:pink_book_app/ui/widget/theme/color_theme.dart';
 import 'package:pink_book_app/ui/widget/theme/text_theme.dart';
 
+// class InputPage adalah halaman di mana pengguna dapat memasukkan data baru atau mengedit data yang sudah ada. Halaman ini memiliki beberapa bidang input untuk data seperti tes OGTT, tes oksimeter, diameter perut, penambahan berat badan, usia ibu, tes alkohol, usia kehamilan, gambar USG terlampir, dan catatan tambahan. Pengguna juga dapat menambahkan atau menghapus gambar USG. Setelah memasukkan semua informasi yang diperlukan, pengguna dapat menyimpan data tersebut. Jika pengguna sedang mengedit data yang sudah ada, tombol aksi akan disesuaikan untuk melakukan pembaruan data.
 class InputPage extends StatefulWidget {
   final SaveHistory? saveHistory;
   final bool isEditing;
