@@ -62,7 +62,7 @@ class _ResultPageState extends State<ResultPage> {
           false);
     }
 
-    if (widget.saveHistory.weightGain >= 18 &&
+    if (widget.saveHistory.weightGain >= 12 &&
         widget.saveHistory.weightGain <= 25) {
       isWeightNormal = true;
       addSuggestion('Your Weight is Normal!', true);
