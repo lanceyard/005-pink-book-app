@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:pink_book_app/logic/bloc/history/history_bloc.dart';
 import 'package:pink_book_app/logic/bloc/history_action/history_action_bloc.dart';
 import 'package:pink_book_app/logic/model/save_history.dart';
+import 'package:pink_book_app/ui/utils.dart';
 import 'package:pink_book_app/ui/widget/Dialog/custom_alert_dialog.dart';
 import 'package:pink_book_app/ui/widget/button/filled_button.dart';
 import 'package:pink_book_app/ui/widget/field/inputField.dart';
@@ -52,6 +53,7 @@ class _InputPageState extends State<InputPage> {
           widget.saveHistory!.imagePaths.map((path) => XFile(path)).toList();
       notesController.text = widget.saveHistory!.additionalNotes.toString();
     }
+    print(widget.saveHistory?.id);
   }
 
 //! Logic buat pengambilan image dari local
@@ -445,12 +447,7 @@ class _InputPageState extends State<InputPage> {
                                 itemBuilder: (BuildContext context, int index) {
                                   return Stack(
                                     children: [
-                                      Image.file(
-                                        File(imageFileList[index].path),
-                                        width: 150,
-                                        height: 150,
-                                        fit: BoxFit.cover,
-                                      ),
+                                      showImage(imageFileList[index].path),
                                       Positioned(
                                         top: -10,
                                         right: -10,
@@ -514,10 +511,28 @@ class _InputPageState extends State<InputPage> {
                         height: 24,
                       ),
                       BlocConsumer<HistoryActionBloc, HistoryActionState>(
-                        listener: (context, state) {
+                        listener: (context, state) async {
                           if (state is HistoryActionSuccess) {
-                            Navigator.popUntil(
-                                context, ModalRoute.withName('/'));
+                            Navigator.pop(context);
+                            await showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const CustomAlertDialog(
+                                    title: Icons.info_outlined,
+                                    content: "History Input Saved!",
+                                  );
+                                });
+                          }
+
+                          if (state is HistoryActionError) {
+                            await showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return CustomAlertDialog(
+                                    title: Icons.info_outlined,
+                                    content: state.msg,
+                                  );
+                                });
                           }
                         },
                         builder: (context, state) {
@@ -533,9 +548,9 @@ class _InputPageState extends State<InputPage> {
                             hvColor: basePinkColor,
                             onPressed: () {
                               if (widget.isEditing) {
-                                context
-                                    .read<HistoryActionBloc>()
-                                    .add(HistoryActionUpdateDetailEvent(widget.saveHistory!.id, saveInput()));
+                                context.read<HistoryActionBloc>().add(
+                                    HistoryActionUpdateDetailEvent(
+                                        widget.saveHistory!.id, saveInput()));
                               } else {
                                 context
                                     .read<HistoryActionBloc>()
