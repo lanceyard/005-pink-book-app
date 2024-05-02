@@ -23,12 +23,10 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
           final data = doc.data();
           data['id'] = doc.id;
           final SaveHistory sH = SaveHistory.fromMap(data);
-          print(sH.id);
           _historyData.add(sH);
         }
         emit(HistoryLoaded(_historyData));
       } catch (e) {
-        print(e.toString());
         emit(HistoryLoading());
       }
     });

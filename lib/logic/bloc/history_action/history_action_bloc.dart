@@ -43,8 +43,6 @@ class HistoryActionBloc extends Bloc<HistoryActionEvent, HistoryActionState> {
           downloadUrls.add(downloadUrl);
         }
 
-        print("downloadUrls: $downloadUrls");
-
         // [[ additional input for history ]]
         historyMap['date'] =
             DateFormat('dd-MM-yyyy HH:mm').format(DateTime.now());
@@ -64,9 +62,10 @@ class HistoryActionBloc extends Bloc<HistoryActionEvent, HistoryActionState> {
       final collection = FirebaseFirestore.instance.collection('histories');
       final docRef = collection.doc(event.id);
       await docRef.delete().then((value) {
-        print("Document deleted successfully!");
         HistoryActionSuccess();
-      }).catchError((error) => print("Error deleting document"));
+      }).catchError((error) {
+        HistoryActionError(error);
+      });
     });
 
     on<HistoryActionUpdateDetailEvent>((event, emit) async {
@@ -103,7 +102,6 @@ class HistoryActionBloc extends Bloc<HistoryActionEvent, HistoryActionState> {
         historyMap['imagePaths'] = downloadUrls;
         historyMap['id'] = event.id;
 
-        print("RESULT IS $historyMap");
         try {
           await docRef
               .set(historyMap)
