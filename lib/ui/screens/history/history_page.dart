@@ -261,11 +261,11 @@ class _HistoryPageState extends State<HistoryPage>
                                                     context: context,
                                                     builder:
                                                         (BuildContext context) {
-                                                      return CustomAlertDialog(
+                                                      return const CustomAlertDialog(
                                                         title:
                                                             Icons.info_outlined,
                                                         content:
-                                                            "Input dengan index ke-${index + 1} telah dihapus!",
+                                                            "Input deleted!",
                                                       );
                                                     });
                                               },
